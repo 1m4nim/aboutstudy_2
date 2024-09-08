@@ -11,7 +11,7 @@ root.render(
   <React.StrictMode>
     <>
       {/* <App /> */}
-      <Todo todo="やること・やりたいこと" />
+      <Todo todo="やりたいこと・やったこと" />
       <Cheer init={0} />
 
     </>
