@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Todo from "./component/Todo";
+import Cheer from './component/Cheer';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <>
+      {/* <App /> */}
+      <Todo todo="やること・やりたいこと" />
+      <Cheer init={0} />
+
+    </>
   </React.StrictMode>
 );
 
