@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Todo(props) {
-    const [goalList, setGoalList] = useState([]); // やりたいことリストの状態
-    const [doneList, setDoneList] = useState([]); // やったことリストの状態
+export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
     const [goalInput, setGoalInput] = useState(""); // やりたいことの入力
     const [goalStartTime, setGoalStartTime] = useState(""); // やりたいことの開始時間
     const [goalEndTime, setGoalEndTime] = useState(""); // やりたいことの終了時間
     const [doneInput, setDoneInput] = useState(""); // やったことの入力
     const [doneStartTime, setDoneStartTime] = useState(""); // やったことの開始時間
     const [doneEndTime, setDoneEndTime] = useState(""); // やったことの終了時間
+
+
+    const navigate = useNavigate();
 
     // 経過時間を計算する関数
     const calculateElapsedTime = (startTime, endTime) => {
@@ -32,10 +34,11 @@ export default function Todo(props) {
         if (goalInput.trim() && goalStartTime && goalEndTime) {
             const elapsedTime = calculateElapsedTime(goalStartTime, goalEndTime);
             if (elapsedTime) {
+                // goalListが配列であることを確認して更新
                 setGoalList([...goalList, { text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime }]);
-                setGoalInput(""); // 入力フィールドをリセット
-                setGoalStartTime(""); // 開始時間フィールドをリセット
-                setGoalEndTime("");  // 終了時間フィールドをリセット
+                setGoalInput("");
+                setGoalStartTime("");
+                setGoalEndTime("");
             }
         }
     };
@@ -54,10 +57,12 @@ export default function Todo(props) {
         }
     };
 
+
+
     return (
         <div>
             <div className="todo">
-                <h1>{props.todo}</h1>
+                <h1>やりたいこと・やったこと</h1>
             </div>
             <div className="summary">
                 <div className="before">
@@ -81,7 +86,7 @@ export default function Todo(props) {
                         />
                         <button type="submit">送信</button>
                         <ul className="goal">
-                            {goalList.map((goal, index) => (
+                            {(goalList || []).map((goal, index) => (
                                 <li key={index}>
                                     {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
                                 </li>
@@ -111,7 +116,7 @@ export default function Todo(props) {
                         />
                         <button type="submit">送信</button>
                         <ul className="done">
-                            {doneList.map((done, index) => (
+                            {(doneList || []).map((done, index) => (
                                 <li key={index}>
                                     {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
                                 </li>
@@ -119,7 +124,10 @@ export default function Todo(props) {
                         </ul>
                     </form>
                 </div>
+                <button onClick={() => navigate("/newpage")}>まとまったものはこちら</button>
             </div>
         </div>
+
     );
 }
+

@@ -23,3 +23,39 @@
 // }
 
 // export default App;
+
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Todo from './Todo';
+import NewPage from './NewPage';
+
+function App() {
+    const [goalList, setGoalList] = useState([]);
+    const [doneList, setDoneList] = useState([]);
+
+    return (
+        <Router>
+            <div>
+                <nav>
+                    <ul>
+                        <li><Link to="/">Todo Page</Link></li>
+                        <li><Link to="/newpage">New Page</Link></li>
+                    </ul>
+                </nav>
+
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<Todo goalList={goalList} setGoalList={setGoalList} doneList={doneList} setDoneList={setDoneList} />}
+                    />
+                    <Route
+                        path="/newpage"
+                        element={<NewPage goalList={goalList} doneList={doneList} />}
+                    />
+                </Routes>
+            </div>
+        </Router>
+    );
+}
+
+export default App;
