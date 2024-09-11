@@ -75,6 +75,7 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
         <div>
             <div className="todo">
                 <h1>やりたいこと・やったこと</h1>
+                <p>ここは「やりたいこと」と「やったこと」の実際の乖離を見るための場所です</p>
             </div>
             <div className="summary">
                 <div className="before">
