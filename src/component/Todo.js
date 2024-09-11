@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { db } from "//firebaseConfig.js";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
     const [doneList, setDoneList] = useState([]);
-
     const [goalInput, setGoalInput] = useState("");
     const [goalStartTime, setGoalStartTime] = useState("");
     const [goalEndTime, setGoalEndTime] = useState("");
@@ -15,21 +13,15 @@ export default function Todo() {
 
     const navigate = useNavigate();
 
+    // ローカルストレージに保存されたデータを読み込み
     useEffect(() => {
-        // Firestore からデータを読み込む
-        const fetchData = async () => {
-            const goalSnapshot = await db.collection('goals').get();
-            const goals = goalSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setGoalList(goals);
-
-            const doneSnapshot = await db.collection('dones').get();
-            const dones = doneSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setDoneList(dones);
-        };
-
-        fetchData();
+        const savedGoals = JSON.parse(localStorage.getItem('goals')) || [];
+        const savedDones = JSON.parse(localStorage.getItem('dones')) || [];
+        setGoalList(savedGoals);
+        setDoneList(savedDones);
     }, []);
 
+    // 時間の差を計算
     const calculateElapsedTime = (startTime, endTime) => {
         const start = new Date(`1970-01-01T${startTime}:00`);
         const end = new Date(`1970-01-01T${endTime}:00`);
@@ -45,18 +37,16 @@ export default function Todo() {
         return `${hours}時間 ${minutes}分`;
     };
 
-    const handleGoalSubmit = async (e) => {
+    // やりたいことの送信
+    const handleGoalSubmit = (e) => {
         e.preventDefault();
         if (goalInput.trim() && goalStartTime && goalEndTime) {
             const elapsedTime = calculateElapsedTime(goalStartTime, goalEndTime);
             if (elapsedTime) {
-                const docRef = await db.collection('goals').add({
-                    text: goalInput,
-                    startTime: goalStartTime,
-                    endTime: goalEndTime,
-                    elapsedTime
-                });
-                setGoalList([...goalList, { id: docRef.id, text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime }]);
+                const newGoal = { id: Date.now(), text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime };
+                const updatedGoalList = [...goalList, newGoal];
+                setGoalList(updatedGoalList);
+                localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
                 setGoalInput("");
                 setGoalStartTime("");
                 setGoalEndTime("");
@@ -64,18 +54,16 @@ export default function Todo() {
         }
     };
 
-    const handleDoneSubmit = async (e) => {
+    // やったことの送信
+    const handleDoneSubmit = (e) => {
         e.preventDefault();
         if (doneInput.trim() && doneStartTime && doneEndTime) {
             const elapsedTime = calculateElapsedTime(doneStartTime, doneEndTime);
             if (elapsedTime) {
-                const docRef = await db.collection('dones').add({
-                    text: doneInput,
-                    startTime: doneStartTime,
-                    endTime: doneEndTime,
-                    elapsedTime
-                });
-                setDoneList([...doneList, { id: docRef.id, text: doneInput, startTime: doneStartTime, endTime: doneEndTime, elapsedTime }]);
+                const newDone = { id: Date.now(), text: doneInput, startTime: doneStartTime, endTime: doneEndTime, elapsedTime };
+                const updatedDoneList = [...doneList, newDone];
+                setDoneList(updatedDoneList);
+                localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
                 setDoneInput("");
                 setDoneStartTime("");
                 setDoneEndTime("");
@@ -83,14 +71,18 @@ export default function Todo() {
         }
     };
 
-    const handleDeleteGoal = async (id) => {
-        await db.collection('goals').doc(id).delete();
-        setGoalList(goalList.filter(goal => goal.id !== id));
+    // やりたいことの削除
+    const handleDeleteGoal = (id) => {
+        const updatedGoalList = goalList.filter(goal => goal.id !== id);
+        setGoalList(updatedGoalList);
+        localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
     };
 
-    const handleDeleteDone = async (id) => {
-        await db.collection('dones').doc(id).delete();
-        setDoneList(doneList.filter(done => done.id !== id));
+    // やったことの削除
+    const handleDeleteDone = (id) => {
+        const updatedDoneList = doneList.filter(done => done.id !== id);
+        setDoneList(updatedDoneList);
+        localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
     };
 
     const handleNavigate = () => {
@@ -101,7 +93,7 @@ export default function Todo() {
         <div>
             <div className="todo">
                 <h1>やりたいこと・やったこと</h1>
-                <p>ここは「やりたいこと」と「やったこと」の実際の乖離を見るための場所です</p>
+                <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
             </div>
             <div className="summary">
                 <div className="before">
@@ -124,15 +116,15 @@ export default function Todo() {
                             onChange={(e) => setGoalEndTime(e.target.value)}
                         />
                         <button type="submit">送信</button>
-                        <ul className="goal">
-                            {goalList.map((goal) => (
-                                <li key={goal.id}>
-                                    {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                                    <button onClick={() => handleDeleteGoal(goal.id)}>削除</button>
-                                </li>
-                            ))}
-                        </ul>
                     </form>
+                    <ul className="goal">
+                        {goalList.map((goal) => (
+                            <li key={goal.id}>
+                                {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                <button onClick={() => handleDeleteGoal(goal.id)}>削除</button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
                 <div className="after">
@@ -155,15 +147,15 @@ export default function Todo() {
                             onChange={(e) => setDoneEndTime(e.target.value)}
                         />
                         <button type="submit">送信</button>
-                        <ul className="done">
-                            {doneList.map((done) => (
-                                <li key={done.id}>
-                                    {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                                    <button onClick={() => handleDeleteDone(done.id)}>削除</button>
-                                </li>
-                            ))}
-                        </ul>
                     </form>
+                    <ul className="done">
+                        {doneList.map((done) => (
+                            <li key={done.id}>
+                                {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                <button onClick={() => handleDeleteDone(done.id)}>削除</button>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
                 <button onClick={handleNavigate}>まとまったものはこちら</button>
             </div>
