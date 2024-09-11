@@ -1,21 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
-    const [goalInput, setGoalInput] = useState(""); // やりたいことの入力
-    const [goalStartTime, setGoalStartTime] = useState(""); // やりたいことの開始時間
-    const [goalEndTime, setGoalEndTime] = useState(""); // やりたいことの終了時間
-    const [doneInput, setDoneInput] = useState(""); // やったことの入力
-    const [doneStartTime, setDoneStartTime] = useState(""); // やったことの開始時間
-    const [doneEndTime, setDoneEndTime] = useState(""); // やったことの終了時間
+export default function Todo() {
+    const [goalList, setGoalList] = useState([]);
+    const [doneList, setDoneList] = useState([]);
+
+    const [goalInput, setGoalInput] = useState("");
+    const [goalStartTime, setGoalStartTime] = useState("");
+    const [goalEndTime, setGoalEndTime] = useState("");
+    const [doneInput, setDoneInput] = useState("");
+    const [doneStartTime, setDoneStartTime] = useState("");
+    const [doneEndTime, setDoneEndTime] = useState("");
 
     const navigate = useNavigate();
 
-    // 経過時間を計算する関数
+    useEffect(() => {
+        // 初期化時に localStorage からデータを読み込む
+        const storedGoalList = JSON.parse(localStorage.getItem('goalList')) || [];
+        const storedDoneList = JSON.parse(localStorage.getItem('doneList')) || [];
+        setGoalList(storedGoalList);
+        setDoneList(storedDoneList);
+    }, []);
+
     const calculateElapsedTime = (startTime, endTime) => {
         const start = new Date(`1970-01-01T${startTime}:00`);
         const end = new Date(`1970-01-01T${endTime}:00`);
-        const diff = (end - start) / (1000 * 60); // 分単位の差を計算
+        const diff = (end - start) / (1000 * 60);
 
         if (diff < 0) {
             alert("時間設定が間違っているよ！！！");
@@ -27,13 +37,19 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
         return `${hours}時間 ${minutes}分`;
     };
 
-    // やりたいことの送信ハンドラ
+    const saveToLocalStorage = () => {
+        localStorage.setItem('goalList', JSON.stringify(goalList));
+        localStorage.setItem('doneList', JSON.stringify(doneList));
+    };
+
     const handleGoalSubmit = (e) => {
         e.preventDefault();
         if (goalInput.trim() && goalStartTime && goalEndTime) {
             const elapsedTime = calculateElapsedTime(goalStartTime, goalEndTime);
             if (elapsedTime) {
-                setGoalList([...goalList, { text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime }]);
+                const updatedGoalList = [...goalList, { text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime }];
+                setGoalList(updatedGoalList);
+                saveToLocalStorage();
                 setGoalInput("");
                 setGoalStartTime("");
                 setGoalEndTime("");
@@ -41,34 +57,35 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
         }
     };
 
-    // やったことの送信ハンドラ
     const handleDoneSubmit = (e) => {
         e.preventDefault();
         if (doneInput.trim() && doneStartTime && doneEndTime) {
             const elapsedTime = calculateElapsedTime(doneStartTime, doneEndTime);
             if (elapsedTime) {
-                setDoneList([...doneList, { text: doneInput, startTime: doneStartTime, endTime: doneEndTime, elapsedTime }]);
-                setDoneInput(""); // 入力フィールドをリセット
-                setDoneStartTime(""); // 開始時間フィールドをリセット
-                setDoneEndTime("");  // 終了時間フィールドをリセット
+                const updatedDoneList = [...doneList, { text: doneInput, startTime: doneStartTime, endTime: doneEndTime, elapsedTime }];
+                setDoneList(updatedDoneList);
+                saveToLocalStorage();
+                setDoneInput("");
+                setDoneStartTime("");
+                setDoneEndTime("");
             }
         }
     };
 
-    // やりたいことの削除ハンドラ
     const handleDeleteGoal = (index) => {
         const updatedGoalList = goalList.filter((_, i) => i !== index);
         setGoalList(updatedGoalList);
+        saveToLocalStorage();
     };
 
-    // やったことの削除ハンドラ
     const handleDeleteDone = (index) => {
         const updatedDoneList = doneList.filter((_, i) => i !== index);
         setDoneList(updatedDoneList);
+        saveToLocalStorage();
     };
 
     const handleNavigate = () => {
-        navigate("/newpage", { state: { goalList, doneList } });
+        navigate("/newpage");
     };
 
     return (
@@ -99,7 +116,7 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
                         />
                         <button type="submit">送信</button>
                         <ul className="goal">
-                            {(goalList || []).map((goal, index) => (
+                            {goalList.map((goal, index) => (
                                 <li key={index}>
                                     {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
                                     <button onClick={() => handleDeleteGoal(index)}>削除</button>
@@ -130,7 +147,7 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
                         />
                         <button type="submit">送信</button>
                         <ul className="done">
-                            {(doneList || []).map((done, index) => (
+                            {doneList.map((done, index) => (
                                 <li key={index}>
                                     {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
                                     <button onClick={() => handleDeleteDone(index)}>削除</button>

@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function NewPage() {
-    const location = useLocation();
-    const navigate = useNavigate();
-
     const [goalList, setGoalList] = useState([]);
     const [doneList, setDoneList] = useState([]);
 
-    useEffect(() => {
-        // state からデータを取得
-        const state = location.state || {};
-        const stateGoalList = state.goalList || [];
-        const stateDoneList = state.doneList || [];
+    const navigate = useNavigate();
 
-        // localStorage からのデータを取得
+    useEffect(() => {
         const storedGoalList = JSON.parse(localStorage.getItem('goalList')) || [];
         const storedDoneList = JSON.parse(localStorage.getItem('doneList')) || [];
-
-        // state からのデータを優先
-        setGoalList(stateGoalList.length ? stateGoalList : storedGoalList);
-        setDoneList(stateDoneList.length ? stateDoneList : storedDoneList);
-    }, [location.state]);
+        setGoalList(storedGoalList);
+        setDoneList(storedDoneList);
+    }, []);
 
     const handleDeleteGoal = (index) => {
         const updatedGoalList = goalList.filter((_, i) => i !== index);
