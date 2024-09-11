@@ -9,7 +9,6 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
     const [doneStartTime, setDoneStartTime] = useState(""); // やったことの開始時間
     const [doneEndTime, setDoneEndTime] = useState(""); // やったことの終了時間
 
-
     const navigate = useNavigate();
 
     // 経過時間を計算する関数
@@ -34,7 +33,6 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
         if (goalInput.trim() && goalStartTime && goalEndTime) {
             const elapsedTime = calculateElapsedTime(goalStartTime, goalEndTime);
             if (elapsedTime) {
-                // goalListが配列であることを確認して更新
                 setGoalList([...goalList, { text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime }]);
                 setGoalInput("");
                 setGoalStartTime("");
@@ -57,7 +55,21 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
         }
     };
 
+    // やりたいことの削除ハンドラ
+    const handleDeleteGoal = (index) => {
+        const updatedGoalList = goalList.filter((_, i) => i !== index);
+        setGoalList(updatedGoalList);
+    };
 
+    // やったことの削除ハンドラ
+    const handleDeleteDone = (index) => {
+        const updatedDoneList = doneList.filter((_, i) => i !== index);
+        setDoneList(updatedDoneList);
+    };
+
+    const handleNavigate = () => {
+        navigate("/newpage", { state: { goalList, doneList } });
+    };
 
     return (
         <div>
@@ -89,6 +101,7 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
                             {(goalList || []).map((goal, index) => (
                                 <li key={index}>
                                     {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                    <button onClick={() => handleDeleteGoal(index)}>削除</button>
                                 </li>
                             ))}
                         </ul>
@@ -119,14 +132,14 @@ export default function Todo({ goalList, setGoalList, doneList, setDoneList }) {
                             {(doneList || []).map((done, index) => (
                                 <li key={index}>
                                     {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                    <button onClick={() => handleDeleteDone(index)}>削除</button>
                                 </li>
                             ))}
                         </ul>
                     </form>
                 </div>
-                <button onClick={() => navigate("/newpage")}>まとまったものはこちら</button>
+                <button onClick={handleNavigate}>まとまったものはこちら</button>
             </div>
         </div>
-
     );
 }

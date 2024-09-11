@@ -1,9 +1,9 @@
-//一旦別のページにこれを記述したいので消しておく
+
 
 // import { useState } from "react";
 
-// export default function Cheer({ init }) {
-//     const [count, setCount] = useState(init);
+// export default function Cheer() {
+//     const [count, setCount] = useState(0);
 //     const handleClick = () => {
 //         if (count < 10) {
 //             setCount(count + 1);

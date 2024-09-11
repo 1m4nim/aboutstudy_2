@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import App from './App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Todo from "./component/Todo";
@@ -13,11 +13,12 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* <App /> */}
-        <Route path="/" element={<Todo />} />
-        {/* <Cheer init={0} /> */}
+        <Route path="/" element={<App />} /> {/* Appをルートとして使用 */}
+        <Route path="/todo" element={<Todo />} />
         <Route path="/newpage" element={<NewPage />} />
       </Routes>
+      {/* Cheerコンポーネントをルーティングの外に配置 */}
+      {/* <Cheer init={0} /> */}
     </BrowserRouter>
   </React.StrictMode>
 );
