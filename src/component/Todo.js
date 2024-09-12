@@ -108,11 +108,13 @@ export default function Todo() {
                         <input
                             type="time"
                             value={goalStartTime}
+                            required
                             onChange={(e) => setGoalStartTime(e.target.value)}
                         />
                         <input
                             type="time"
                             value={goalEndTime}
+                            required
                             onChange={(e) => setGoalEndTime(e.target.value)}
                         />
                         <button type="submit">送信</button>
