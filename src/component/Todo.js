@@ -101,25 +101,34 @@ export default function Todo() {
                 <Header as="h2">やりたいこと</Header>
                 <Form onSubmit={handleGoalSubmit}>
                     <Form.Field>
-                        <Input
-                            placeholder="やりたいことを入力"
-                            value={goalInput}
-                            onChange={(e) => setGoalInput(e.target.value)}
-                        />
+                        <label>
+                            やりたいことを入力してください
+                            <Input
+                                placeholder="やりたいことを入力"
+                                value={goalInput}
+                                onChange={(e) => setGoalInput(e.target.value)}
+                            />
+                        </label>
                     </Form.Field>
                     <Form.Group widths="equal">
-                        <Form.Input
-                            type="time"
-                            value={goalStartTime}
-                            required
-                            onChange={(e) => setGoalStartTime(e.target.value)}
-                        />
-                        <Form.Input
-                            type="time"
-                            value={goalEndTime}
-                            required
-                            onChange={(e) => setGoalEndTime(e.target.value)}
-                        />
+                        <label>
+                            はじめる時間
+                            <Form.Input
+                                type="time"
+                                value={goalStartTime}
+                                required
+                                onChange={(e) => setGoalStartTime(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            終わる予定の時間
+                            <Form.Input
+                                type="time"
+                                value={goalEndTime}
+                                required
+                                onChange={(e) => setGoalEndTime(e.target.value)}
+                            />
+                        </label>
                     </Form.Group>
                     <Button type="submit" primary>送信</Button>
                 </Form>
@@ -140,23 +149,32 @@ export default function Todo() {
                 <Header as="h2">やったこと</Header>
                 <Form onSubmit={handleDoneSubmit}>
                     <Form.Field>
-                        <Input
-                            placeholder="やったことを入力"
-                            value={doneInput}
-                            onChange={(e) => setDoneInput(e.target.value)}
-                        />
+                        <label>
+                            やったことを入力してね
+                            <Input
+                                placeholder="やったことを入力"
+                                value={doneInput}
+                                onChange={(e) => setDoneInput(e.target.value)}
+                            />
+                        </label>
                     </Form.Field>
                     <Form.Group widths="equal">
-                        <Form.Input
-                            type="time"
-                            value={doneStartTime}
-                            onChange={(e) => setDoneStartTime(e.target.value)}
-                        />
-                        <Form.Input
-                            type="time"
-                            value={doneEndTime}
-                            onChange={(e) => setDoneEndTime(e.target.value)}
-                        />
+                        <label>
+                            はじめた時間
+                            <Form.Input
+                                type="time"
+                                value={doneStartTime}
+                                onChange={(e) => setDoneStartTime(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            終わった時間
+                            <Form.Input
+                                type="time"
+                                value={doneEndTime}
+                                onChange={(e) => setDoneEndTime(e.target.value)}
+                            />
+                        </label>
                     </Form.Group>
                     <Button type="submit" primary>送信</Button>
                 </Form>
