@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Form, Input, List, Segment, Header, Container } from 'semantic-ui-react';
+
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
@@ -90,77 +92,105 @@ export default function Todo() {
     };
 
     return (
-        <div>
-            <div className="todo">
-                <h1>やりたいこと・やったこと</h1>
+        <Container>
+            <Segment>
+                <Header as="h1">やりたいこと・やったこと</Header>
                 <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
-            </div>
-            <div className="summary">
-                <div className="before">
-                    <h2>やりたいこと</h2>
-                    <form onSubmit={handleGoalSubmit}>
-                        <input
-                            type="text"
-                            value={goalInput}
-                            onChange={(e) => setGoalInput(e.target.value)}
-                            placeholder="やりたいことを入力"
-                        />
-                        <input
-                            type="time"
-                            value={goalStartTime}
-                            required
-                            onChange={(e) => setGoalStartTime(e.target.value)}
-                        />
-                        <input
-                            type="time"
-                            value={goalEndTime}
-                            required
-                            onChange={(e) => setGoalEndTime(e.target.value)}
-                        />
-                        <button type="submit">送信</button>
-                    </form>
-                    <ul className="goal">
-                        {goalList.map((goal) => (
-                            <li key={goal.id}>
-                                {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                                <button onClick={() => handleDeleteGoal(goal.id)}>削除</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+            </Segment>
+            <Segment>
+                <Header as="h2">やりたいこと</Header>
+                <Form onSubmit={handleGoalSubmit}>
+                    <Form.Field>
+                        <label>
+                            やりたいことを入力してください
+                            <Input
+                                placeholder="やりたいことを入力"
+                                value={goalInput}
+                                onChange={(e) => setGoalInput(e.target.value)}
+                            />
+                        </label>
+                    </Form.Field>
+                    <Form.Group widths="equal">
+                        <label>
+                            はじめる時間
+                            <Form.Input
+                                type="time"
+                                value={goalStartTime}
+                                required
+                                onChange={(e) => setGoalStartTime(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            終わる予定の時間
+                            <Form.Input
+                                type="time"
+                                value={goalEndTime}
+                                required
+                                onChange={(e) => setGoalEndTime(e.target.value)}
+                            />
+                        </label>
+                    </Form.Group>
+                    <Button type="submit" primary>送信</Button>
+                </Form>
+                <List divided relaxed>
+                    {goalList.map((goal) => (
+                        <List.Item key={goal.id}>
+                            <List.Content>
+                                <List.Header>{goal.text}</List.Header>
+                                {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                <Button onClick={() => handleDeleteGoal(goal.id)} color="red" floated="right">削除</Button>
+                            </List.Content>
+                        </List.Item>
+                    ))}
+                </List>
+            </Segment>
 
-                <div className="after">
-                    <h2>やったこと</h2>
-                    <form onSubmit={handleDoneSubmit}>
-                        <input
-                            type="text"
-                            value={doneInput}
-                            onChange={(e) => setDoneInput(e.target.value)}
-                            placeholder="やったことを入力"
-                        />
-                        <input
-                            type="time"
-                            value={doneStartTime}
-                            onChange={(e) => setDoneStartTime(e.target.value)}
-                        />
-                        <input
-                            type="time"
-                            value={doneEndTime}
-                            onChange={(e) => setDoneEndTime(e.target.value)}
-                        />
-                        <button type="submit">送信</button>
-                    </form>
-                    <ul className="done">
-                        {doneList.map((done) => (
-                            <li key={done.id}>
-                                {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                                <button onClick={() => handleDeleteDone(done.id)}>削除</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <button onClick={handleNavigate}>まとまったものはこちら</button>
-            </div>
-        </div>
+            <Segment>
+                <Header as="h2">やったこと</Header>
+                <Form onSubmit={handleDoneSubmit}>
+                    <Form.Field>
+                        <label>
+                            やったことを入力してね
+                            <Input
+                                placeholder="やったことを入力"
+                                value={doneInput}
+                                onChange={(e) => setDoneInput(e.target.value)}
+                            />
+                        </label>
+                    </Form.Field>
+                    <Form.Group widths="equal">
+                        <label>
+                            はじめた時間
+                            <Form.Input
+                                type="time"
+                                value={doneStartTime}
+                                onChange={(e) => setDoneStartTime(e.target.value)}
+                            />
+                        </label>
+                        <label>
+                            終わった時間
+                            <Form.Input
+                                type="time"
+                                value={doneEndTime}
+                                onChange={(e) => setDoneEndTime(e.target.value)}
+                            />
+                        </label>
+                    </Form.Group>
+                    <Button type="submit" primary>送信</Button>
+                </Form>
+                <List divided relaxed>
+                    {doneList.map((done) => (
+                        <List.Item key={done.id}>
+                            <List.Content>
+                                <List.Header>{done.text}</List.Header>
+                                {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                <Button onClick={() => handleDeleteDone(done.id)} color="red" floated="right">削除</Button>
+                            </List.Content>
+                        </List.Item>
+                    ))}
+                </List>
+            </Segment>
+            <Button onClick={handleNavigate}>まとまったものはこちら</Button>
+        </Container>
     );
 }

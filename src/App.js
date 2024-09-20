@@ -1,5 +1,5 @@
 //import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Todo from './component/Todo';
+import Todo from "./component/Todo";
 //import NewPage from './component/NewPage';
 import React from "react";
 
