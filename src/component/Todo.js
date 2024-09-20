@@ -102,7 +102,7 @@ export default function Todo() {
                 <Form onSubmit={handleGoalSubmit}>
                     <Form.Field>
                         <label>
-                            やりたいことを入力してください
+                            やりたいことを入力してね
                             <Input
                                 placeholder="やりたいことを入力"
                                 value={goalInput}
