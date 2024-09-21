@@ -104,7 +104,7 @@ export default function Todo() {
                         <label>
                             やりたいことを入力してね
                             <Input
-                                placeholder="やりたいことを入力"
+                                placeholder="数学"
                                 value={goalInput}
                                 onChange={(e) => setGoalInput(e.target.value)}
                             />
@@ -152,7 +152,7 @@ export default function Todo() {
                         <label>
                             やったことを入力してね
                             <Input
-                                placeholder="やったことを入力"
+                                placeholder="宿題"
                                 value={doneInput}
                                 onChange={(e) => setDoneInput(e.target.value)}
                             />
