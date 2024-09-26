@@ -124,6 +124,12 @@ export default function Todo() {
         return current && current < moment().startOf('day');
     };
 
+    // 過去の時間を選べないようにする
+    const disablePastTimes = (current) => {
+        const now = moment();
+        return current && current < now.startOf('minute');
+    };
+
     return (
         <div>
             <div className="todo">
@@ -158,6 +164,7 @@ export default function Todo() {
                                 onChange={setGoalStartTime}
                                 format="HH:mm"
                                 placeholder="開始時間"
+                                disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                                 required
                             />
                         </Form.Item>
@@ -167,6 +174,7 @@ export default function Todo() {
                                 onChange={setGoalEndTime}
                                 format="HH:mm"
                                 placeholder="終了時間"
+                                disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                                 required
                             />
                         </Form.Item>
