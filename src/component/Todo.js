@@ -51,7 +51,7 @@ export default function Todo() {
 
     // 選択可能な日付の制限
     const disablePastDates = (current) => {
-        return current && current < moment().endOf('day'); // 今日以前の日付を無効化
+        return current && current < moment().startOf('day'); // 今日より前の日付を無効化
     };
 
     // やりたいことの送信
