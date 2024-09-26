@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Typography, List, Divider } from 'antd';
+
+const { Title, Text } = Typography;
 
 export default function NewPage() {
     const [goalList, setGoalList] = useState([]);
@@ -29,31 +32,45 @@ export default function NewPage() {
     };
 
     return (
-        <div>
-            <h1>まとめページ</h1>
+        <div style={{ padding: '20px' }}>
+            <Title level={1}>まとめページ</Title>
+            <Divider />
             <div>
-                <h2>やりたいこと</h2>
-                <ul>
-                    {goalList.map((goal) => (
-                        <li key={goal.id}>
-                            {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                            <button onClick={() => handleGoalDelete(goal.id)}>削除</button>
-                        </li>
-                    ))}
-                </ul>
+                <Title level={2}>やりたいこと</Title>
+                <List
+                    bordered
+                    dataSource={goalList}
+                    renderItem={goal => (
+                        <List.Item
+                            actions={[<Button type="link" danger onClick={() => handleGoalDelete(goal.id)}>削除</Button>]}
+                        >
+                            <List.Item.Meta
+                                title={goal.text}
+                                description={`${goal.startTime} から ${goal.endTime} まで (${goal.elapsedTime})`}
+                            />
+                        </List.Item>
+                    )}
+                />
             </div>
+            <Divider />
             <div>
-                <h2>やったこと</h2>
-                <ul>
-                    {doneList.map((done) => (
-                        <li key={done.id}>
-                            {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                            <button onClick={() => handleDoneDelete(done.id)}>削除</button>
-                        </li>
-                    ))}
-                </ul>
-                <button onClick={() => navigate(-1)}>戻る</button>
+                <Title level={2}>やったこと</Title>
+                <List
+                    bordered
+                    dataSource={doneList}
+                    renderItem={done => (
+                        <List.Item
+                            actions={[<Button type="link" danger onClick={() => handleDoneDelete(done.id)}>削除</Button>]}
+                        >
+                            <List.Item.Meta
+                                title={done.text}
+                                description={`${done.startTime} から ${done.endTime} まで (${done.elapsedTime})`}
+                            />
+                        </List.Item>
+                    )}
+                />
             </div>
+            <Button type="primary" onClick={() => navigate(-1)}>戻る</Button>
         </div>
     );
 }
