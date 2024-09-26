@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Header, List, Segment } from 'semantic-ui-react';
 
 export default function NewPage() {
     const [goalList, setGoalList] = useState([]);
@@ -30,30 +31,42 @@ export default function NewPage() {
 
     return (
         <div>
-            <h1>まとめページ</h1>
-            <div>
-                <h2>やりたいこと</h2>
-                <ul>
-                    {goalList.map((goal) => (
-                        <li key={goal.id}>
-                            {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                            <button onClick={() => handleGoalDelete(goal.id)}>削除</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div>
-                <h2>やったこと</h2>
-                <ul>
-                    {doneList.map((done) => (
-                        <li key={done.id}>
-                            {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                            <button onClick={() => handleDoneDelete(done.id)}>削除</button>
-                        </li>
-                    ))}
-                </ul>
-                <button onClick={() => navigate(-1)}>戻る</button>
-            </div>
+            <Segment>
+                <Header as="h1">まとめページ</Header>
+                <div>
+                    <Header as="h2">やりたいこと</Header>
+                    <List divided relaxed>
+                        {goalList.map((goal) => (
+                            <List.Item key={goal.id}>
+                                <List.Content>
+                                    <List.Header>{goal.text}</List.Header>
+                                    <List.Description>
+                                        {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                    </List.Description>
+                                    <Button onClick={() => handleGoalDelete(goal.id)} color="red" floated="right">削除</Button>
+                                </List.Content>
+                            </List.Item>
+                        ))}
+                    </List>
+                </div>
+                <div>
+                    <Header as="h2">やったこと</Header>
+                    <List divided relaxed>
+                        {doneList.map((done) => (
+                            <List.Item key={done.id}>
+                                <List.Content>
+                                    <List.Header>{done.text}</List.Header>
+                                    <List.Description>
+                                        {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                    </List.Description>
+                                    <Button onClick={() => handleDoneDelete(done.id)} color="red" floated="right">削除</Button>
+                                </List.Content>
+                            </List.Item>
+                        ))}
+                    </List>
+                </div>
+                <Button onClick={() => navigate(-1)} color="blue">戻る</Button>
+            </Segment>
         </div>
     );
 }

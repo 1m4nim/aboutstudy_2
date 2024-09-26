@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Input, List, Segment, Header, Container } from 'semantic-ui-react';
 
-
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
     const [doneList, setDoneList] = useState([]);
     const [goalInput, setGoalInput] = useState("");
+    const [goalDate, setGoalDate] = useState(""); // 日付を追加
     const [goalStartTime, setGoalStartTime] = useState("");
     const [goalEndTime, setGoalEndTime] = useState("");
     const [doneInput, setDoneInput] = useState("");
+    const [doneDate, setDoneDate] = useState(""); // 日付を追加
     const [doneStartTime, setDoneStartTime] = useState("");
     const [doneEndTime, setDoneEndTime] = useState("");
 
@@ -42,31 +43,39 @@ export default function Todo() {
     // やりたいことの送信
     const handleGoalSubmit = (e) => {
         e.preventDefault();
-        if (goalInput.trim() && goalStartTime && goalEndTime) {
+        const selectedDate = new Date(goalDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // 時間をリセット
+
+        if (goalInput.trim() && goalStartTime && goalEndTime && selectedDate >= today) {
             const elapsedTime = calculateElapsedTime(goalStartTime, goalEndTime);
             if (elapsedTime) {
-                const newGoal = { id: Date.now(), text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime };
+                const newGoal = { id: Date.now(), text: goalInput, date: goalDate, startTime: goalStartTime, endTime: goalEndTime, elapsedTime };
                 const updatedGoalList = [...goalList, newGoal];
                 setGoalList(updatedGoalList);
                 localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
                 setGoalInput("");
+                setGoalDate("");
                 setGoalStartTime("");
                 setGoalEndTime("");
             }
+        } else {
+            alert("未来の日付を選んでください。");
         }
     };
 
     // やったことの送信
     const handleDoneSubmit = (e) => {
         e.preventDefault();
-        if (doneInput.trim() && doneStartTime && doneEndTime) {
+        if (doneInput.trim() && doneStartTime && doneEndTime && doneDate) {
             const elapsedTime = calculateElapsedTime(doneStartTime, doneEndTime);
             if (elapsedTime) {
-                const newDone = { id: Date.now(), text: doneInput, startTime: doneStartTime, endTime: doneEndTime, elapsedTime };
+                const newDone = { id: Date.now(), text: doneInput, date: doneDate, startTime: doneStartTime, endTime: doneEndTime, elapsedTime };
                 const updatedDoneList = [...doneList, newDone];
                 setDoneList(updatedDoneList);
                 localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
                 setDoneInput("");
+                setDoneDate("");
                 setDoneStartTime("");
                 setDoneEndTime("");
             }
@@ -112,6 +121,15 @@ export default function Todo() {
                     </Form.Field>
                     <Form.Group widths="equal">
                         <label>
+                            日付
+                            <Form.Input
+                                type="date"
+                                value={goalDate}
+                                required
+                                onChange={(e) => setGoalDate(e.target.value)}
+                            />
+                        </label>
+                        <label>
                             はじめる時間
                             <Form.Input
                                 type="time"
@@ -137,7 +155,7 @@ export default function Todo() {
                         <List.Item key={goal.id}>
                             <List.Content>
                                 <List.Header>{goal.text}</List.Header>
-                                {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                {goal.date} {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
                                 <Button onClick={() => handleDeleteGoal(goal.id)} color="red" floated="right">削除</Button>
                             </List.Content>
                         </List.Item>
@@ -159,6 +177,14 @@ export default function Todo() {
                         </label>
                     </Form.Field>
                     <Form.Group widths="equal">
+                        <label>
+                            日付
+                            <Form.Input
+                                type="date"
+                                value={doneDate}
+                                onChange={(e) => setDoneDate(e.target.value)}
+                            />
+                        </label>
                         <label>
                             はじめた時間
                             <Form.Input
@@ -183,7 +209,7 @@ export default function Todo() {
                         <List.Item key={done.id}>
                             <List.Content>
                                 <List.Header>{done.text}</List.Header>
-                                {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                {done.date} {done.startTime} から {done.endTime} まで ({done.elapsedTime})
                                 <Button onClick={() => handleDeleteDone(done.id)} color="red" floated="right">削除</Button>
                             </List.Content>
                         </List.Item>
