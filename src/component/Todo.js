@@ -17,6 +17,7 @@ export default function Todo() {
 
     const navigate = useNavigate();
 
+    // ローカルストレージに保存されたデータを読み込み
     useEffect(() => {
         const savedGoals = JSON.parse(localStorage.getItem('goals')) || [];
         const savedDones = JSON.parse(localStorage.getItem('dones')) || [];
@@ -26,40 +27,29 @@ export default function Todo() {
 
     // 時間の差を計算
     const calculateElapsedTime = (startTime, endTime) => {
-        if (!startTime || !endTime) {
-            message.error("正しい日付と時間を選択してください。");
-            return null;
-        }
-
         const diff = moment(endTime).diff(moment(startTime), 'minutes');
 
         if (diff < 0) {
-            message.error("終了時間が開始時間より早くなっています！");
+            message.error("時間設定が間違っているよ！！！"); // 時間の設定が間違っている場合のエラーメッセージ
             return null;
         }
 
         const hours = Math.floor(diff / 60);
         const minutes = diff % 60;
-
         return `${hours}時間 ${minutes}分`;
-    };
-
-    // 日付と時間を組み合わせる
-    const combineDateTime = (date, time) => {
-        return date && time ? moment(date.format('YYYY-MM-DD') + ' ' + time.format('HH:mm')) : null;
-    };
-
-    // 選択可能な日付の制限
-    const disablePastDates = (current) => {
-        return current && current < moment().startOf('day'); // 今日より前の日付を無効化
     };
 
     // やりたいことの送信
     const handleGoalSubmit = () => {
-        const startDateTime = combineDateTime(goalDate, goalStartTime);
-        const endDateTime = combineDateTime(goalDate, goalEndTime);
-
-        if (goalInput.trim() && startDateTime && endDateTime) {
+        if (goalInput.trim() && goalDate && goalStartTime && goalEndTime) {
+            const startDateTime = moment(goalDate).set({
+                hour: goalStartTime.hour(),
+                minute: goalStartTime.minute(),
+            });
+            const endDateTime = moment(goalDate).set({
+                hour: goalEndTime.hour(),
+                minute: goalEndTime.minute(),
+            });
             const elapsedTime = calculateElapsedTime(startDateTime, endDateTime);
             if (elapsedTime) {
                 const newGoal = {
@@ -82,10 +72,15 @@ export default function Todo() {
 
     // やったことの送信
     const handleDoneSubmit = () => {
-        const startDateTime = combineDateTime(doneDate, doneStartTime);
-        const endDateTime = combineDateTime(doneDate, doneEndTime);
-
-        if (doneInput.trim() && startDateTime && endDateTime) {
+        if (doneInput.trim() && doneDate && doneStartTime && doneEndTime) {
+            const startDateTime = moment(doneDate).set({
+                hour: doneStartTime.hour(),
+                minute: doneStartTime.minute(),
+            });
+            const endDateTime = moment(doneDate).set({
+                hour: doneEndTime.hour(),
+                minute: doneEndTime.minute(),
+            });
             const elapsedTime = calculateElapsedTime(startDateTime, endDateTime);
             if (elapsedTime) {
                 const newDone = {
@@ -106,12 +101,14 @@ export default function Todo() {
         }
     };
 
+    // やりたいことの削除
     const handleDeleteGoal = (id) => {
         const updatedGoalList = goalList.filter(goal => goal.id !== id);
         setGoalList(updatedGoalList);
         localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
     };
 
+    // やったことの削除
     const handleDeleteDone = (id) => {
         const updatedDoneList = doneList.filter(done => done.id !== id);
         setDoneList(updatedDoneList);
@@ -120,6 +117,11 @@ export default function Todo() {
 
     const handleNavigate = () => {
         navigate("/newpage");
+    };
+
+    // 今日以降の日付を選択できるようにする
+    const disablePastDates = (current) => {
+        return current && current < moment().startOf('day');
     };
 
     return (
@@ -144,17 +146,16 @@ export default function Todo() {
                         <Form.Item>
                             <DatePicker
                                 value={goalDate}
-                                onChange={(date) => setGoalDate(date)}
-                                format="YYYY-MM-DD"
-                                placeholder="日付を選択"
-                                disabledDate={disablePastDates} // 過去の日付を無効化
+                                onChange={setGoalDate}
+                                disabledDate={disablePastDates} // 過去の日付を選べないようにする
+                                placeholder="日付"
                                 required
                             />
                         </Form.Item>
                         <Form.Item>
                             <TimePicker
                                 value={goalStartTime}
-                                onChange={(time) => setGoalStartTime(time)}
+                                onChange={setGoalStartTime}
                                 format="HH:mm"
                                 placeholder="開始時間"
                                 required
@@ -163,7 +164,7 @@ export default function Todo() {
                         <Form.Item>
                             <TimePicker
                                 value={goalEndTime}
-                                onChange={(time) => setGoalEndTime(time)}
+                                onChange={setGoalEndTime}
                                 format="HH:mm"
                                 placeholder="終了時間"
                                 required
@@ -179,7 +180,8 @@ export default function Todo() {
                         dataSource={goalList}
                         renderItem={goal => (
                             <List.Item
-                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}>
+                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}
+                            >
                                 {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
                             </List.Item>
                         )}
@@ -200,17 +202,15 @@ export default function Todo() {
                         <Form.Item>
                             <DatePicker
                                 value={doneDate}
-                                onChange={(date) => setDoneDate(date)}
-                                format="YYYY-MM-DD"
-                                placeholder="日付を選択"
-                                disabledDate={disablePastDates} // 過去の日付を無効化
+                                onChange={setDoneDate}
+                                placeholder="日付"
                                 required
                             />
                         </Form.Item>
                         <Form.Item>
                             <TimePicker
                                 value={doneStartTime}
-                                onChange={(time) => setDoneStartTime(time)}
+                                onChange={setDoneStartTime}
                                 format="HH:mm"
                                 placeholder="開始時間"
                                 required
@@ -219,7 +219,7 @@ export default function Todo() {
                         <Form.Item>
                             <TimePicker
                                 value={doneEndTime}
-                                onChange={(time) => setDoneEndTime(time)}
+                                onChange={setDoneEndTime}
                                 format="HH:mm"
                                 placeholder="終了時間"
                                 required
@@ -235,7 +235,8 @@ export default function Todo() {
                         dataSource={doneList}
                         renderItem={done => (
                             <List.Item
-                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}>
+                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}
+                            >
                                 {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
                             </List.Item>
                         )}
