@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Input, Form, DatePicker, TimePicker, List, message } from 'antd';
+import { Button, Input, Form, DatePicker, TimePicker, List, message, Flex } from 'antd';
 import moment from 'moment';
 
 export default function Todo() {
@@ -260,9 +260,23 @@ export default function Todo() {
                         )}
                     />
                 </div>
-                <Button type="link" onClick={handleNavigate}>
+
+                <Flex
+                    vertical
+                    gap="small"
+                    style={{
+                        width: "100%",
+                    }}
+                >
+                    <Button type="primary" block onClick={handleNavigate}>
+                        まとまったものはこちら
+                    </Button>
+
+
+                </Flex>
+                {/* <Button type="link"  onClick={handleNavigate}>
                     まとまったものはこちら
-                </Button>
+                </Button> */}
             </div>
         </div>
     );
