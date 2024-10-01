@@ -142,6 +142,7 @@ export default function Todo() {
                     <h2>やりたいこと</h2>
                     <Form onFinish={handleGoalSubmit}>
                         <Form.Item>
+                            <label>やる予定のもの</label>
                             <Input
                                 value={goalInput}
                                 onChange={(e) => setGoalInput(e.target.value)}
@@ -150,30 +151,33 @@ export default function Todo() {
                             />
                         </Form.Item>
                         <Form.Item>
+                            <label>日付</label>
                             <DatePicker
                                 value={goalDate}
                                 onChange={setGoalDate}
                                 disabledDate={disablePastDates} // 過去の日付を選べないようにする
-                                placeholder="日付"
+                                placeholder="2024/09/01"
                                 required
                             />
                         </Form.Item>
                         <Form.Item>
+                            <label>開始時間</label>
                             <TimePicker
                                 value={goalStartTime}
                                 onChange={setGoalStartTime}
                                 format="HH:mm"
-                                placeholder="開始時間"
+                                placeholder="19:20"
                                 disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                                 required
                             />
                         </Form.Item>
                         <Form.Item>
+                            <label>終了時間</label>
                             <TimePicker
                                 value={goalEndTime}
                                 onChange={setGoalEndTime}
                                 format="HH:mm"
-                                placeholder="終了時間"
+                                placeholder="20:30"
                                 disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                                 required
                             />
@@ -200,6 +204,7 @@ export default function Todo() {
                     <h2>やったこと</h2>
                     <Form onFinish={handleDoneSubmit}>
                         <Form.Item>
+                            <label>やったこと</label>
                             <Input
                                 value={doneInput}
                                 onChange={(e) => setDoneInput(e.target.value)}
@@ -208,28 +213,31 @@ export default function Todo() {
                             />
                         </Form.Item>
                         <Form.Item>
+                            <label>日付</label>
                             <DatePicker
                                 value={doneDate}
                                 onChange={setDoneDate}
-                                placeholder="日付"
+                                placeholder="2019/09/14"
                                 required
                             />
                         </Form.Item>
                         <Form.Item>
+                            <label>開始時間</label>
                             <TimePicker
                                 value={doneStartTime}
                                 onChange={setDoneStartTime}
                                 format="HH:mm"
-                                placeholder="開始時間"
+                                placeholder="10:00"
                                 required
                             />
                         </Form.Item>
                         <Form.Item>
+                            <label>終了時間</label>
                             <TimePicker
                                 value={doneEndTime}
                                 onChange={setDoneEndTime}
                                 format="HH:mm"
-                                placeholder="終了時間"
+                                placeholder="19:00"
                                 required
                             />
                         </Form.Item>
