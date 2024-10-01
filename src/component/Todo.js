@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Input, Form, DatePicker, TimePicker, List, message, Flex } from 'antd';
 import moment from 'moment';
+//import FormItem from 'antd/es/form/FormItem';
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
@@ -130,6 +131,7 @@ export default function Todo() {
         return current && current < now.startOf('minute');
     };
 
+
     return (
         <div>
             <div className="todo">
@@ -140,9 +142,11 @@ export default function Todo() {
             <div className="summary">
                 <div className="before">
                     <h2>やりたいこと</h2>
+
+
+                    <p style={{ fontWeight: "bold" }}>やる予定のもの</p>
                     <Form onFinish={handleGoalSubmit}>
                         <Form.Item>
-                            <label>やる予定のもの</label>
                             <Input
                                 value={goalInput}
                                 onChange={(e) => setGoalInput(e.target.value)}
@@ -151,8 +155,8 @@ export default function Todo() {
                                 required
                             />
                         </Form.Item>
+                        <p style={{ fontWeight: "bold" }}>日付</p>
                         <Form.Item>
-                            <label>日付</label>
                             <DatePicker
                                 value={goalDate}
                                 onChange={setGoalDate}
@@ -161,8 +165,8 @@ export default function Todo() {
                                 required
                             />
                         </Form.Item>
+                        <p style={{ fontWeight: "bold" }}>開始時間</p>
                         <Form.Item>
-                            <label>開始時間</label>
                             <TimePicker
                                 value={goalStartTime}
                                 onChange={setGoalStartTime}
@@ -172,8 +176,8 @@ export default function Todo() {
                                 required
                             />
                         </Form.Item>
+                        <p style={{ fontWeight: "bold" }}>終了時間</p>
                         <Form.Item>
-                            <label>終了時間</label>
                             <TimePicker
                                 value={goalEndTime}
                                 onChange={setGoalEndTime}
@@ -189,12 +193,12 @@ export default function Todo() {
                             </Button>
                         </Form.Item>
                     </Form>
+
                     <List
                         dataSource={goalList}
                         renderItem={goal => (
                             <List.Item
-                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}
-                            >
+                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}>
                                 {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
                             </List.Item>
                         )}
@@ -203,9 +207,10 @@ export default function Todo() {
 
                 <div className="after">
                     <h2>やったこと</h2>
+
                     <Form onFinish={handleDoneSubmit}>
+                        <p style={{ fontWeight: "bold" }}>やったこと</p>
                         <Form.Item>
-                            <label>やったこと</label>
                             <Input
                                 value={doneInput}
                                 onChange={(e) => setDoneInput(e.target.value)}
@@ -214,8 +219,8 @@ export default function Todo() {
                                 required
                             />
                         </Form.Item>
+                        <p style={{ fontWeight: "bold" }}>日付</p>
                         <Form.Item>
-                            <label>日付</label>
                             <DatePicker
                                 value={doneDate}
                                 onChange={setDoneDate}
@@ -223,8 +228,8 @@ export default function Todo() {
                                 required
                             />
                         </Form.Item>
+                        <p style={{ fontWeight: "bold" }}>開始時間</p>
                         <Form.Item>
-                            <label>開始時間</label>
                             <TimePicker
                                 value={doneStartTime}
                                 onChange={setDoneStartTime}
@@ -233,8 +238,8 @@ export default function Todo() {
                                 required
                             />
                         </Form.Item>
+                        <p style={{ fontWeight: "bold" }}>終了時間</p>
                         <Form.Item>
-                            <label>終了時間</label>
                             <TimePicker
                                 value={doneEndTime}
                                 onChange={setDoneEndTime}
@@ -249,35 +254,24 @@ export default function Todo() {
                             </Button>
                         </Form.Item>
                     </Form>
+
                     <List
                         dataSource={doneList}
                         renderItem={done => (
                             <List.Item
-                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}
-                            >
+                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}>
                                 {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
                             </List.Item>
                         )}
                     />
                 </div>
 
-                <Flex
-                    vertical
-                    gap="small"
-                    style={{
-                        width: "100%",
-                    }}
-                >
+                <Flex vertical gap="small" style={{ width: "100%" }}>
                     <Button type="primary" block onClick={handleNavigate}>
                         まとまったものはこちら
                     </Button>
-
-
                 </Flex>
-                {/* <Button type="link"  onClick={handleNavigate}>
-                    まとまったものはこちら
-                </Button> */}
             </div>
-        </div>
+        </div >
     );
 }
