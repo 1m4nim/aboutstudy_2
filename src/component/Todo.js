@@ -147,6 +147,7 @@ export default function Todo() {
                                 value={goalInput}
                                 onChange={(e) => setGoalInput(e.target.value)}
                                 placeholder="宿題"
+                                style={{ width: "350px" }}
                                 required
                             />
                         </Form.Item>
@@ -209,6 +210,7 @@ export default function Todo() {
                                 value={doneInput}
                                 onChange={(e) => setDoneInput(e.target.value)}
                                 placeholder="算数"
+                                style={{ width: "350px" }}
                                 required
                             />
                         </Form.Item>
