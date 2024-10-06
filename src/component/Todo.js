@@ -121,15 +121,15 @@ export default function Todo() {
     };
 
     // 今日以降の日付を選択できるようにする
-    const disablePastDates = (current) => {
-        return current && current < moment().startOf('day');
-    };
+    // const disablePastDates = (current) => {
+    //     return current && current < moment().startOf('day');
+    // };
 
     // 過去の時間を選べないようにする
-    const disablePastTimes = (current) => {
-        const now = moment();
-        return current && current < now.startOf('minute');
-    };
+    // const disablePastTimes = (current) => {
+    //     const now = moment();
+    //     return current && current < now.startOf('minute');
+    // };
 
 
     return (
@@ -173,10 +173,8 @@ export default function Todo() {
                             onChange={setGoalStartTime}
                             format="HH:mm"
 
-                            // disabledTime={disablePastTimes} // 過去の時間を選べないようにする
-                            required
                         >
-                            <TimePicker placeholder="19:20" />                            <TimePicker disabledDate={disablePastTimes} />
+                            <TimePicker placeholder="19:20" />
                         </Form.Item>
 
                         <Form.Item
@@ -185,7 +183,6 @@ export default function Todo() {
                             onChange={setGoalEndTime}
                             format="HH:mm"
 
-                            // disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                             required
                         >
                             <TimePicker placeholder="20:30" />
