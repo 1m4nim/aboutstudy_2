@@ -143,50 +143,55 @@ export default function Todo() {
                 <div className="before">
                     <h2>やりたいこと</h2>
 
-
-                    <p style={{ fontWeight: "bold" }}>やる予定のもの</p>
                     <Form onFinish={handleGoalSubmit}>
-                        <Form.Item>
-                            <Input
-                                value={goalInput}
-                                onChange={(e) => setGoalInput(e.target.value)}
-                                placeholder="宿題"
-                                style={{ width: "350px" }}
-                                required
-                            />
+                        <Form.Item
+                            label="やる予定のもの"
+
+                            placeholder="宿題"
+                            value={goalInput}
+                            onChange={(e) => setGoalInput(e.target.value)}
+                            style={{ width: "350px" }}
+                        >
+                            <Input />
+
                         </Form.Item>
-                        <p style={{ fontWeight: "bold" }}>日付</p>
-                        <Form.Item>
-                            <DatePicker
-                                value={goalDate}
-                                onChange={setGoalDate}
-                                disabledDate={disablePastDates} // 過去の日付を選べないようにする
-                                placeholder="2024/09/01"
-                                required
-                            />
+
+
+                        <Form.Item
+                            label="日付"
+                            value={goalDate}
+                            onChange={setGoalDate}
+                            // disabledate={disablePastDates} // 過去の日付を選べないようにする
+                            placeholder="2024/09/01"
+                            required
+                        >
+                            <DatePicker disabledDate={disablePastDates} />
                         </Form.Item>
-                        <p style={{ fontWeight: "bold" }}>開始時間</p>
-                        <Form.Item>
-                            <TimePicker
-                                value={goalStartTime}
-                                onChange={setGoalStartTime}
-                                format="HH:mm"
-                                placeholder="19:20"
-                                disabledTime={disablePastTimes} // 過去の時間を選べないようにする
-                                required
-                            />
+
+                        <Form.Item
+                            label="開始時間"
+                            value={goalStartTime}
+                            onChange={setGoalStartTime}
+                            format="HH:mm"
+                            placeholder="19:20"
+                            // disabledTime={disablePastTimes} // 過去の時間を選べないようにする
+                            required
+                        >
+                            <TimePicker disabledDate={disablePastTimes} />
                         </Form.Item>
-                        <p style={{ fontWeight: "bold" }}>終了時間</p>
-                        <Form.Item>
-                            <TimePicker
-                                value={goalEndTime}
-                                onChange={setGoalEndTime}
-                                format="HH:mm"
-                                placeholder="20:30"
-                                disabledTime={disablePastTimes} // 過去の時間を選べないようにする
-                                required
-                            />
+
+                        <Form.Item
+                            label="終了時間"
+                            value={goalEndTime}
+                            onChange={setGoalEndTime}
+                            format="HH:mm"
+                            placeholder="20:30"
+                            // disabledTime={disablePastTimes} // 過去の時間を選べないようにする
+                            required
+                        >
+                            <TimePicker disabledTime={disablePastTimes} />
                         </Form.Item>
+
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                                 送信
@@ -209,45 +214,50 @@ export default function Todo() {
                     <h2>やったこと</h2>
 
                     <Form onFinish={handleDoneSubmit}>
-                        <p style={{ fontWeight: "bold" }}>やったこと</p>
-                        <Form.Item>
-                            <Input
-                                value={doneInput}
-                                onChange={(e) => setDoneInput(e.target.value)}
-                                placeholder="算数"
-                                style={{ width: "350px" }}
-                                required
-                            />
+
+                        <Form.Item
+                            label="やったこと"
+                            value={doneInput}
+                            onChange={(e) => setDoneInput(e.target.value)}
+                            placeholder="算数"
+                            style={{ width: "350px" }}
+                            required
+                        >
+                            < Input />
                         </Form.Item>
-                        <p style={{ fontWeight: "bold" }}>日付</p>
-                        <Form.Item>
-                            <DatePicker
-                                value={doneDate}
-                                onChange={setDoneDate}
-                                placeholder="2019/09/14"
-                                required
-                            />
+
+                        <Form.Item
+                            label="日付"
+                            value={doneDate}
+                            onChange={setDoneDate}
+                            placeholder="2019/09/14"
+                            required
+                        >
+                            <DatePicker />
                         </Form.Item>
-                        <p style={{ fontWeight: "bold" }}>開始時間</p>
-                        <Form.Item>
-                            <TimePicker
-                                value={doneStartTime}
-                                onChange={setDoneStartTime}
-                                format="HH:mm"
-                                placeholder="10:00"
-                                required
-                            />
+
+                        <Form.Item
+                            label="やり始めた時間"
+                            value={doneStartTime}
+                            onChange={setDoneStartTime}
+                            format="HH:mm"
+                            placeholder="10:00"
+                            required
+                        >
+                            <TimePicker />
                         </Form.Item>
-                        <p style={{ fontWeight: "bold" }}>終了時間</p>
-                        <Form.Item>
-                            <TimePicker
-                                value={doneEndTime}
-                                onChange={setDoneEndTime}
-                                format="HH:mm"
-                                placeholder="19:00"
-                                required
-                            />
+
+                        <Form.Item
+                            label="終了時間"
+                            value={doneEndTime}
+                            onChange={setDoneEndTime}
+                            format="HH:mm"
+                            placeholder="19:00"
+                            required
+                        >
+                            <TimePicker />
                         </Form.Item>
+
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                                 送信
