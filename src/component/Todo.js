@@ -147,12 +147,11 @@ export default function Todo() {
                         <Form.Item
                             label="やる予定のもの"
 
-                            placeholder="宿題"
                             value={goalInput}
                             onChange={(e) => setGoalInput(e.target.value)}
                             style={{ width: "350px" }}
                         >
-                            <Input />
+                            <Input placeholder="宿題" />
 
                         </Form.Item>
 
@@ -162,10 +161,10 @@ export default function Todo() {
                             value={goalDate}
                             onChange={setGoalDate}
                             // disabledate={disablePastDates} // 過去の日付を選べないようにする
-                            placeholder="2024/09/01"
                             required
                         >
-                            <DatePicker disabledDate={disablePastDates} />
+                            <DatePicker placeholder="2024/09/01" />
+
                         </Form.Item>
 
                         <Form.Item
@@ -173,11 +172,11 @@ export default function Todo() {
                             value={goalStartTime}
                             onChange={setGoalStartTime}
                             format="HH:mm"
-                            placeholder="19:20"
+
                             // disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                             required
                         >
-                            <TimePicker disabledDate={disablePastTimes} />
+                            <TimePicker placeholder="19:20" />                            <TimePicker disabledDate={disablePastTimes} />
                         </Form.Item>
 
                         <Form.Item
@@ -185,11 +184,11 @@ export default function Todo() {
                             value={goalEndTime}
                             onChange={setGoalEndTime}
                             format="HH:mm"
-                            placeholder="20:30"
+
                             // disabledTime={disablePastTimes} // 過去の時間を選べないようにする
                             required
                         >
-                            <TimePicker disabledTime={disablePastTimes} />
+                            <TimePicker placeholder="20:30" />
                         </Form.Item>
 
                         <Form.Item>
@@ -219,21 +218,21 @@ export default function Todo() {
                             label="やったこと"
                             value={doneInput}
                             onChange={(e) => setDoneInput(e.target.value)}
-                            placeholder="算数"
+
                             style={{ width: "350px" }}
                             required
                         >
-                            < Input />
+                            < Input placeholder="算数" />
                         </Form.Item>
 
                         <Form.Item
                             label="日付"
                             value={doneDate}
                             onChange={setDoneDate}
-                            placeholder="2019/09/14"
+
                             required
                         >
-                            <DatePicker />
+                            <DatePicker placeholder="2019/09/14" />
                         </Form.Item>
 
                         <Form.Item
@@ -241,10 +240,10 @@ export default function Todo() {
                             value={doneStartTime}
                             onChange={setDoneStartTime}
                             format="HH:mm"
-                            placeholder="10:00"
+
                             required
                         >
-                            <TimePicker />
+                            <TimePicker placeholder="10:00" />
                         </Form.Item>
 
                         <Form.Item
@@ -252,10 +251,10 @@ export default function Todo() {
                             value={doneEndTime}
                             onChange={setDoneEndTime}
                             format="HH:mm"
-                            placeholder="19:00"
+
                             required
                         >
-                            <TimePicker />
+                            <TimePicker placeholder="19:00" />
                         </Form.Item>
 
                         <Form.Item>
