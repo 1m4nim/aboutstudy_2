@@ -139,6 +139,19 @@ export default function Todo() {
                 <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
             </div>
 
+            <Form
+                name="basic"
+                labelCol={{
+                    span: 12,
+                }}
+                wrapperCol={{
+                    span: 12,
+                }}
+                style={{
+                    maxWidth: 200,
+                }}
+            />
+
             <div className="summary">
                 <div className="before">
                     <h2>やりたいこと</h2>
@@ -146,12 +159,12 @@ export default function Todo() {
                     <Form onFinish={handleGoalSubmit}>
                         <Form.Item
                             label="やる予定のもの"
-
                             value={goalInput}
                             onChange={(e) => setGoalInput(e.target.value)}
-                            style={{ width: "350px" }}
+                            required
+
                         >
-                            <Input placeholder="宿題" />
+                            <Input style={{ width: "12" }} placeholder="宿題" />
 
                         </Form.Item>
 
@@ -163,7 +176,7 @@ export default function Todo() {
                             // disabledate={disablePastDates} // 過去の日付を選べないようにする
                             required
                         >
-                            <DatePicker placeholder="2024/09/01" />
+                            <DatePicker style={{ width: "12" }} placeholder="2024/09/01" />
 
                         </Form.Item>
 
@@ -172,9 +185,9 @@ export default function Todo() {
                             value={goalStartTime}
                             onChange={setGoalStartTime}
                             format="HH:mm"
-
+                            required
                         >
-                            <TimePicker placeholder="19:20" />
+                            <TimePicker style={{ width: "12" }} placeholder="19:20" />
                         </Form.Item>
 
                         <Form.Item
@@ -185,7 +198,7 @@ export default function Todo() {
 
                             required
                         >
-                            <TimePicker placeholder="20:30" />
+                            <TimePicker style={{ width: "12" }} placeholder="20:30" />
                         </Form.Item>
 
                         <Form.Item>
@@ -215,11 +228,9 @@ export default function Todo() {
                             label="やったこと"
                             value={doneInput}
                             onChange={(e) => setDoneInput(e.target.value)}
-
-                            style={{ width: "350px" }}
                             required
                         >
-                            < Input placeholder="算数" />
+                            < Input style={{ width: "12" }} placeholder="算数" />
                         </Form.Item>
 
                         <Form.Item
@@ -229,7 +240,7 @@ export default function Todo() {
 
                             required
                         >
-                            <DatePicker placeholder="2019/09/14" />
+                            <DatePicker style={{ width: "12" }} placeholder="2019/09/14" />
                         </Form.Item>
 
                         <Form.Item
@@ -240,7 +251,7 @@ export default function Todo() {
 
                             required
                         >
-                            <TimePicker placeholder="10:00" />
+                            <TimePicker style={{ width: "12" }} placeholder="10:00" />
                         </Form.Item>
 
                         <Form.Item
@@ -251,7 +262,7 @@ export default function Todo() {
 
                             required
                         >
-                            <TimePicker placeholder="19:00" />
+                            <TimePicker style={{ width: "12" }} placeholder="19:00" />
                         </Form.Item>
 
                         <Form.Item>
