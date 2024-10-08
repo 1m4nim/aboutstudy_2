@@ -153,7 +153,7 @@ export default function Todo() {
                             required
 
                         >
-                            <Input style={{ width: "auto" }} placeholder="宿題" />
+                            <Input style={{ width: "100%" }} placeholder="宿題" />
 
                         </Form.Item>
 
@@ -165,7 +165,7 @@ export default function Todo() {
                             // disabledate={disablePastDates} // 過去の日付を選べないようにする
                             required
                         >
-                            <DatePicker style={{ width: "12" }} placeholder="2024/09/01" />
+                            <DatePicker style={{ width: "100%" }} placeholder="2024/09/01" />
 
                         </Form.Item>
 
@@ -176,7 +176,7 @@ export default function Todo() {
                             format="HH:mm"
                             required
                         >
-                            <TimePicker style={{ width: "12" }} placeholder="19:20" />
+                            <TimePicker style={{ width: "100%" }} placeholder="19:20" />
                         </Form.Item>
 
                         <Form.Item
@@ -187,7 +187,7 @@ export default function Todo() {
 
                             required
                         >
-                            <TimePicker style={{ width: "12" }} placeholder="20:30" />
+                            <TimePicker style={{ width: "100%" }} placeholder="20:30" />
                         </Form.Item>
 
                         <Form.Item>
@@ -229,7 +229,7 @@ export default function Todo() {
 
                             required
                         >
-                            <DatePicker style={{ width: "12" }} placeholder="2019/09/14" />
+                            <DatePicker style={{ width: "100%" }} placeholder="2019/09/14" />
                         </Form.Item>
 
                         <Form.Item
@@ -240,7 +240,7 @@ export default function Todo() {
 
                             required
                         >
-                            <TimePicker style={{ width: "12" }} placeholder="10:00" />
+                            <TimePicker style={{ width: "100%" }} placeholder="10:00" />
                         </Form.Item>
 
                         <Form.Item
@@ -251,7 +251,7 @@ export default function Todo() {
 
                             required
                         >
-                            <TimePicker style={{ width: "12" }} placeholder="19:00" />
+                            <TimePicker style={{ width: "100%" }} placeholder="19:00" />
                         </Form.Item>
 
                         <Form.Item>
