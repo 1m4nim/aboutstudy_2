@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Input, Form, DatePicker, TimePicker, List, message } from 'antd';
+import { Button, Input, Form, DatePicker, TimePicker, List, message, Flex } from 'antd';
 import moment from 'moment';
+//import FormItem from 'antd/es/form/FormItem';
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
@@ -120,15 +121,16 @@ export default function Todo() {
     };
 
     // 今日以降の日付を選択できるようにする
-    const disablePastDates = (current) => {
-        return current && current < moment().startOf('day');
-    };
+    // const disablePastDates = (current) => {
+    //     return current && current < moment().startOf('day');
+    // };
 
     // 過去の時間を選べないようにする
-    const disablePastTimes = (current) => {
-        const now = moment();
-        return current && current < now.startOf('minute');
-    };
+    // const disablePastTimes = (current) => {
+    //     const now = moment();
+    //     return current && current < now.startOf('minute');
+    // };
+
 
     return (
         <div>
@@ -137,59 +139,69 @@ export default function Todo() {
                 <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
             </div>
 
+
+
             <div className="summary">
                 <div className="before">
                     <h2>やりたいこと</h2>
+
                     <Form onFinish={handleGoalSubmit}>
-                        <Form.Item>
-                            <Input
-                                value={goalInput}
-                                onChange={(e) => setGoalInput(e.target.value)}
-                                placeholder="宿題"
-                                required
-                            />
+                        <Form.Item
+                            label="やる予定のもの"
+                            value={goalInput}
+                            onChange={(e) => setGoalInput(e.target.value)}
+                            required
+
+                        >
+                            <Input style={{ width: "100%" }} placeholder="宿題" />
+
                         </Form.Item>
-                        <Form.Item>
-                            <DatePicker
-                                value={goalDate}
-                                onChange={setGoalDate}
-                                disabledDate={disablePastDates} // 過去の日付を選べないようにする
-                                placeholder="日付"
-                                required
-                            />
+
+
+                        <Form.Item
+                            label="日付"
+                            value={goalDate}
+                            onChange={setGoalDate}
+                            // disabledate={disablePastDates} // 過去の日付を選べないようにする
+                            required
+                        >
+                            <DatePicker style={{ width: "100%" }} placeholder="2024/09/01" />
+
                         </Form.Item>
-                        <Form.Item>
-                            <TimePicker
-                                value={goalStartTime}
-                                onChange={setGoalStartTime}
-                                format="HH:mm"
-                                placeholder="開始時間"
-                                disabledTime={disablePastTimes} // 過去の時間を選べないようにする
-                                required
-                            />
+
+                        <Form.Item
+                            label="開始時間"
+                            value={goalStartTime}
+                            onChange={setGoalStartTime}
+                            format="HH:mm"
+                            required
+                        >
+                            <TimePicker style={{ width: "100%" }} placeholder="19:20" />
                         </Form.Item>
-                        <Form.Item>
-                            <TimePicker
-                                value={goalEndTime}
-                                onChange={setGoalEndTime}
-                                format="HH:mm"
-                                placeholder="終了時間"
-                                disabledTime={disablePastTimes} // 過去の時間を選べないようにする
-                                required
-                            />
+
+                        <Form.Item
+                            label="終了時間"
+                            value={goalEndTime}
+                            onChange={setGoalEndTime}
+                            format="HH:mm"
+
+                            required
+                        >
+                            <TimePicker style={{ width: "100%" }} placeholder="20:30" />
                         </Form.Item>
+
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                                 送信
                             </Button>
                         </Form.Item>
                     </Form>
+
                     <List
                         dataSource={goalList}
                         renderItem={goal => (
                             <List.Item
-                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}
-                            >
+                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}>
                                 {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
                             </List.Item>
                         )}
@@ -198,62 +210,74 @@ export default function Todo() {
 
                 <div className="after">
                     <h2>やったこと</h2>
+
                     <Form onFinish={handleDoneSubmit}>
-                        <Form.Item>
-                            <Input
-                                value={doneInput}
-                                onChange={(e) => setDoneInput(e.target.value)}
-                                placeholder="算数"
-                                required
-                            />
+
+                        <Form.Item
+                            label="やったこと"
+                            value={doneInput}
+                            onChange={(e) => setDoneInput(e.target.value)}
+                            required
+                        >
+                            < Input style={{ height: "auto" }} placeholder="算数" />
                         </Form.Item>
-                        <Form.Item>
-                            <DatePicker
-                                value={doneDate}
-                                onChange={setDoneDate}
-                                placeholder="日付"
-                                required
-                            />
+
+                        <Form.Item
+                            label="日付"
+                            value={doneDate}
+                            onChange={setDoneDate}
+
+                            required
+                        >
+                            <DatePicker style={{ width: "100%" }} placeholder="2019/09/14" />
                         </Form.Item>
-                        <Form.Item>
-                            <TimePicker
-                                value={doneStartTime}
-                                onChange={setDoneStartTime}
-                                format="HH:mm"
-                                placeholder="開始時間"
-                                required
-                            />
+
+                        <Form.Item
+                            label="やり始めた時間"
+                            value={doneStartTime}
+                            onChange={setDoneStartTime}
+                            format="HH:mm"
+
+                            required
+                        >
+                            <TimePicker style={{ width: "100%" }} placeholder="10:00" />
                         </Form.Item>
-                        <Form.Item>
-                            <TimePicker
-                                value={doneEndTime}
-                                onChange={setDoneEndTime}
-                                format="HH:mm"
-                                placeholder="終了時間"
-                                required
-                            />
+
+                        <Form.Item
+                            label="終了時間"
+                            value={doneEndTime}
+                            onChange={setDoneEndTime}
+                            format="HH:mm"
+
+                            required
+                        >
+                            <TimePicker style={{ width: "100%" }} placeholder="19:00" />
                         </Form.Item>
+
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
                                 送信
                             </Button>
                         </Form.Item>
                     </Form>
+
                     <List
                         dataSource={doneList}
                         renderItem={done => (
                             <List.Item
-                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}
-                            >
+                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}>
                                 {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
                             </List.Item>
                         )}
                     />
                 </div>
-                <Button type="link" onClick={handleNavigate}>
-                    まとまったものはこちら
-                </Button>
+
+                <Flex vertical gap="small" style={{ width: "100%" }}>
+                    <Button type="primary" block onClick={handleNavigate}>
+                        まとまったものはこちら
+                    </Button>
+                </Flex>
             </div>
-        </div>
+        </div >
     );
 }
