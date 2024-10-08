@@ -139,18 +139,7 @@ export default function Todo() {
                 <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
             </div>
 
-            <Form
-                name="basic"
-                labelCol={{
-                    span: 12,
-                }}
-                wrapperCol={{
-                    span: 12,
-                }}
-                style={{
-                    maxWidth: 200,
-                }}
-            />
+
 
             <div className="summary">
                 <div className="before">
@@ -164,7 +153,7 @@ export default function Todo() {
                             required
 
                         >
-                            <Input style={{ width: "12" }} placeholder="宿題" />
+                            <Input style={{ width: "auto" }} placeholder="宿題" />
 
                         </Form.Item>
 
@@ -230,7 +219,7 @@ export default function Todo() {
                             onChange={(e) => setDoneInput(e.target.value)}
                             required
                         >
-                            < Input style={{ width: "12" }} placeholder="算数" />
+                            < Input style={{ height: "auto" }} placeholder="算数" />
                         </Form.Item>
 
                         <Form.Item
