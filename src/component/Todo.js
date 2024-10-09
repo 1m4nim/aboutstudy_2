@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Input, Form, DatePicker, TimePicker, List, message, Flex } from 'antd';
+import { Button, Input, Form, DatePicker, TimePicker, List, message, Layout } from 'antd';
 import moment from 'moment';
-//import FormItem from 'antd/es/form/FormItem';
+const { Header, Content } = Layout;
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
@@ -18,7 +18,6 @@ export default function Todo() {
 
     const navigate = useNavigate();
 
-    // ローカルストレージに保存されたデータを読み込み
     useEffect(() => {
         const savedGoals = JSON.parse(localStorage.getItem('goals')) || [];
         const savedDones = JSON.parse(localStorage.getItem('dones')) || [];
@@ -26,12 +25,11 @@ export default function Todo() {
         setDoneList(savedDones);
     }, []);
 
-    // 時間の差を計算
     const calculateElapsedTime = (startTime, endTime) => {
         const diff = moment(endTime).diff(moment(startTime), 'minutes');
 
         if (diff < 0) {
-            message.error("時間設定が間違っているよ！！！"); // 時間の設定が間違っている場合のエラーメッセージ
+            message.error("時間設定が間違っているよ！！！");
             return null;
         }
 
@@ -40,7 +38,6 @@ export default function Todo() {
         return `${hours}時間 ${minutes}分`;
     };
 
-    // やりたいことの送信
     const handleGoalSubmit = () => {
         if (goalInput.trim() && goalDate && goalStartTime && goalEndTime) {
             const startDateTime = moment(goalDate).set({
@@ -62,7 +59,7 @@ export default function Todo() {
                 };
                 const updatedGoalList = [...goalList, newGoal];
                 setGoalList(updatedGoalList);
-                localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
+                localStorage.setItem('goals', JSON.stringify(updatedGoalList));
                 setGoalInput("");
                 setGoalDate(null);
                 setGoalStartTime(null);
@@ -71,7 +68,6 @@ export default function Todo() {
         }
     };
 
-    // やったことの送信
     const handleDoneSubmit = () => {
         if (doneInput.trim() && doneDate && doneStartTime && doneEndTime) {
             const startDateTime = moment(doneDate).set({
@@ -93,7 +89,7 @@ export default function Todo() {
                 };
                 const updatedDoneList = [...doneList, newDone];
                 setDoneList(updatedDoneList);
-                localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
+                localStorage.setItem('dones', JSON.stringify(updatedDoneList));
                 setDoneInput("");
                 setDoneDate(null);
                 setDoneStartTime(null);
@@ -102,182 +98,113 @@ export default function Todo() {
         }
     };
 
-    // やりたいことの削除
     const handleDeleteGoal = (id) => {
         const updatedGoalList = goalList.filter(goal => goal.id !== id);
         setGoalList(updatedGoalList);
-        localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
+        localStorage.setItem('goals', JSON.stringify(updatedGoalList));
     };
 
-    // やったことの削除
     const handleDeleteDone = (id) => {
         const updatedDoneList = doneList.filter(done => done.id !== id);
         setDoneList(updatedDoneList);
-        localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
+        localStorage.setItem('dones', JSON.stringify(updatedDoneList));
     };
 
     const handleNavigate = () => {
         navigate("/newpage");
     };
 
-    // 今日以降の日付を選択できるようにする
-    // const disablePastDates = (current) => {
-    //     return current && current < moment().startOf('day');
-    // };
+    const containerStyle = {
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+    };
 
-    // 過去の時間を選べないようにする
-    // const disablePastTimes = (current) => {
-    //     const now = moment();
-    //     return current && current < now.startOf('minute');
-    // };
-
+    const contentStyle = {
+        flex: 1,
+        overflow: 'auto',
+        padding: '20px',
+    };
 
     return (
-        <div>
-            <div className="todo">
+        <Layout style={containerStyle}>
+            <Header style={{ backgroundColor: "#E6E8F1", color: "#22292C", textAlign: "center" }}>
                 <h1>やりたいこと・やったこと</h1>
                 <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
-            </div>
-
-
-
-            <div className="summary">
-                <div className="before">
-                    <h2>やりたいこと</h2>
-
-                    <Form onFinish={handleGoalSubmit}>
-                        <Form.Item
-                            label="やる予定のもの"
-                            value={goalInput}
-                            onChange={(e) => setGoalInput(e.target.value)}
-                            required
-
-                        >
-                            <Input style={{ width: "100%" }} placeholder="宿題" />
-
-                        </Form.Item>
-
-
-                        <Form.Item
-                            label="日付"
-                            value={goalDate}
-                            onChange={setGoalDate}
-                            // disabledate={disablePastDates} // 過去の日付を選べないようにする
-                            required
-                        >
-                            <DatePicker style={{ width: "100%" }} placeholder="2024/09/01" />
-
-                        </Form.Item>
-
-                        <Form.Item
-                            label="開始時間"
-                            value={goalStartTime}
-                            onChange={setGoalStartTime}
-                            format="HH:mm"
-                            required
-                        >
-                            <TimePicker style={{ width: "100%" }} placeholder="19:20" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="終了時間"
-                            value={goalEndTime}
-                            onChange={setGoalEndTime}
-                            format="HH:mm"
-
-                            required
-                        >
-                            <TimePicker style={{ width: "100%" }} placeholder="20:30" />
-                        </Form.Item>
-
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                送信
+            </Header>
+            <Content style={contentStyle}>
+                <Layout style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    <Layout style={{ flex: 1 }}>
+                        <Header style={{ backgroundColor: "#A6B5A5", color: "#fff", textAlign: "center" }}>
+                            <h2>やりたいこと</h2>
+                        </Header>
+                        <Content>
+                            <Form onFinish={handleGoalSubmit} layout="vertical">
+                                <Form.Item label="やる予定のもの" required>
+                                    <Input value={goalInput} onChange={(e) => setGoalInput(e.target.value)} />
+                                </Form.Item>
+                                <Form.Item label="日付" required>
+                                    <DatePicker value={goalDate} onChange={setGoalDate} style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Form.Item label="開始時間" required>
+                                    <TimePicker value={goalStartTime} onChange={setGoalStartTime} format="HH:mm" style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Form.Item label="終了時間" required>
+                                    <TimePicker value={goalEndTime} onChange={setGoalEndTime} format="HH:mm" style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Button type="primary" htmlType="submit" block >
+                                    送信
+                                </Button>
+                            </Form>
+                            <List
+                                dataSource={goalList}
+                                renderItem={goal => (
+                                    <List.Item
+                                        actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}>
+                                        {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                    </List.Item>
+                                )}
+                            />
+                        </Content>
+                    </Layout>
+                    <Layout style={{ flex: 1 }}>
+                        <Header style={{ backgroundColor: "#A6B5A5", color: "#fff", textAlign: "center" }}>
+                            <h2>やったこと</h2>
+                        </Header>
+                        <Content>
+                            <Form onFinish={handleDoneSubmit} layout="vertical">
+                                <Form.Item label="やったこと" required>
+                                    <Input value={doneInput} onChange={(e) => setDoneInput(e.target.value)} />
+                                </Form.Item>
+                                <Form.Item label="日付" required>
+                                    <DatePicker value={doneDate} onChange={setDoneDate} style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Form.Item label="やり始めた時間" required>
+                                    <TimePicker value={doneStartTime} onChange={setDoneStartTime} format="HH:mm" style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Form.Item label="終了時間" required>
+                                    <TimePicker value={doneEndTime} onChange={setDoneEndTime} format="HH:mm" style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Button type="primary" htmlType="submit" block>
+                                    送信
+                                </Button>
+                            </Form>
+                            <List
+                                dataSource={doneList}
+                                renderItem={done => (
+                                    <List.Item
+                                        actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}>
+                                        {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                    </List.Item>
+                                )}
+                            />
+                            <Button type="primary" block onClick={handleNavigate}>
+                                まとまったものはこちら
                             </Button>
-                        </Form.Item>
-                    </Form>
-
-                    <List
-                        dataSource={goalList}
-                        renderItem={goal => (
-                            <List.Item
-                                actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]}>
-                                {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                            </List.Item>
-                        )}
-                    />
-                </div>
-
-                <div className="after">
-                    <h2>やったこと</h2>
-
-                    <Form onFinish={handleDoneSubmit}>
-
-                        <Form.Item
-                            label="やったこと"
-                            value={doneInput}
-                            onChange={(e) => setDoneInput(e.target.value)}
-                            required
-                        >
-                            < Input style={{ height: "auto" }} placeholder="算数" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="日付"
-                            value={doneDate}
-                            onChange={setDoneDate}
-
-                            required
-                        >
-                            <DatePicker style={{ width: "100%" }} placeholder="2019/09/14" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="やり始めた時間"
-                            value={doneStartTime}
-                            onChange={setDoneStartTime}
-                            format="HH:mm"
-
-                            required
-                        >
-                            <TimePicker style={{ width: "100%" }} placeholder="10:00" />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="終了時間"
-                            value={doneEndTime}
-                            onChange={setDoneEndTime}
-                            format="HH:mm"
-
-                            required
-                        >
-                            <TimePicker style={{ width: "100%" }} placeholder="19:00" />
-                        </Form.Item>
-
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                送信
-                            </Button>
-                        </Form.Item>
-                    </Form>
-
-                    <List
-                        dataSource={doneList}
-                        renderItem={done => (
-                            <List.Item
-                                actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]}>
-                                {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                            </List.Item>
-                        )}
-                    />
-                </div>
-
-                <Flex vertical gap="small" style={{ width: "100%" }}>
-                    <Button type="primary" block onClick={handleNavigate}>
-                        まとまったものはこちら
-                    </Button>
-                </Flex>
-            </div>
-        </div >
+                        </Content>
+                    </Layout>
+                </Layout>
+            </Content>
+        </Layout>
     );
 }
