@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import TextField from "@mui/material/TextField";
+import Button from '@mui/material/Button';
+import Delete from "@mui/icons-material/Delete";
+import Send from "@mui/icons-material/Send";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
@@ -92,38 +100,44 @@ export default function Todo() {
     return (
         <div>
             <div className="todo">
-                <h1>やりたいこと・やったこと</h1>
+                <h1>コレヤル</h1>
                 <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
             </div>
             <div className="summary">
                 <div className="before">
                     <h2>やりたいこと</h2>
                     <form onSubmit={handleGoalSubmit}>
-                        <input
+                        <TextField
+                            variant='standard'
                             type="text"
                             value={goalInput}
                             onChange={(e) => setGoalInput(e.target.value)}
                             placeholder="やりたいことを入力"
                         />
-                        <input
-                            type="time"
-                            value={goalStartTime}
-                            required
-                            onChange={(e) => setGoalStartTime(e.target.value)}
-                        />
-                        <input
-                            type="time"
-                            value={goalEndTime}
-                            required
-                            onChange={(e) => setGoalEndTime(e.target.value)}
-                        />
-                        <button type="submit">送信</button>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={["TimePicker"]}>
+                                <TimePicker
+                                    label="始めた時間"
+
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={["TimePicker"]}>
+                                <TimePicker
+                                    label="終わる予定の時間"
+
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
+                        <Button variant='contained' endIcon={<Send />} type="submit">送信</Button>
                     </form>
                     <ul className="goal">
                         {goalList.map((goal) => (
                             <li key={goal.id}>
                                 {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                                <button onClick={() => handleDeleteGoal(goal.id)}>削除</button>
+                                <Button variant="outlined" startIcon={<Delete />} onClick={() => handleDeleteGoal(goal.id)}>削除</Button>
                             </li>
                         ))}
                     </ul>
@@ -132,29 +146,35 @@ export default function Todo() {
                 <div className="after">
                     <h2>やったこと</h2>
                     <form onSubmit={handleDoneSubmit}>
-                        <input
+                        <TextField
+                            variant='standard'
                             type="text"
                             value={doneInput}
                             onChange={(e) => setDoneInput(e.target.value)}
                             placeholder="やったことを入力"
                         />
-                        <input
-                            type="time"
-                            value={doneStartTime}
-                            onChange={(e) => setDoneStartTime(e.target.value)}
-                        />
-                        <input
-                            type="time"
-                            value={doneEndTime}
-                            onChange={(e) => setDoneEndTime(e.target.value)}
-                        />
-                        <button type="submit">送信</button>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={["TimePicker"]}>
+                                <TimePicker
+                                    label="始めた時間"
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={["TimePicker"]}>
+                                <TimePicker
+                                    label="終わった時間"
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
+                        <Button variant='contained' endIcon={<Send />} type="submit">送信</Button>
                     </form>
                     <ul className="done">
                         {doneList.map((done) => (
                             <li key={done.id}>
                                 {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                                <button onClick={() => handleDeleteDone(done.id)}>削除</button>
+                                <Button variant="outlined" startIcon={<Delete />} onClick={() => handleDeleteDone(done.id)}>削除</Button>
                             </li>
                         ))}
                     </ul>
