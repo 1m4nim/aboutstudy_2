@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Input, Form, DatePicker, TimePicker, List, message, Layout } from 'antd';
 import moment from 'moment';
-const { Header, Content } = Layout;
+const { Header, Content, Footer } = Layout;
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
@@ -126,11 +126,14 @@ export default function Todo() {
         padding: '20px',
     };
 
+    const footerstyle = {
+        backgroundColor: "#b0a37d"
+    };
+
     return (
         <Layout style={containerStyle}>
-            <Header style={{ backgroundColor: "#E6E8F1", color: "#22292C", textAlign: "center" }}>
-                <h1>やりたいこと・やったこと</h1>
-                <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
+            <Header style={{ backgroundColor: "#97c49c", color: "#22292C", textAlign: "center" }}>
+                <h1>コレヤル</h1>
             </Header>
             <Content style={contentStyle}>
                 <Layout style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
@@ -205,6 +208,12 @@ export default function Todo() {
                     </Layout>
                 </Layout>
             </Content>
+            <Footer style={{ footerstyle, textAlign: "center", backgroundColor: "#b5a874" }}>
+                <a href='https://github.com/1m4nim' target="_blank" rel="noopener noreferrer" style={{ color: "#706001" }}>
+                    1m4nim's GitHub
+                </a>
+            </Footer>
+
         </Layout>
     );
 }
