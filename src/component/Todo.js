@@ -208,9 +208,9 @@ export default function Todo() {
                     </Layout>
                 </Layout>
             </Content>
-            <Footer style={{ footerstyle, textAlign: "center", backgroundColor: "#b5a874" }}>
+            <Footer style={{ footerstyle, textAlign: "center", backgroundColor: "#cbe3c5" }}>
                 <a href='https://github.com/1m4nim' target="_blank" rel="noopener noreferrer" style={{ color: "#706001" }}>
-                    1m4nim's GitHub
+                    1m4nim's GitHubはこちら
                 </a>
             </Footer>
 
