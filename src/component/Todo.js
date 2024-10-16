@@ -144,16 +144,16 @@ export default function Todo() {
                         <Content>
                             <Form onFinish={handleGoalSubmit} layout="vertical">
                                 <Form.Item label="やる予定のもの" required>
-                                    <Input fontsize={"16px"} value={goalInput} onChange={(e) => setGoalInput(e.target.value)} />
+                                    <Input style={{ fontsize: "16px" }} value={goalInput} onChange={(e) => setGoalInput(e.target.value)} />
                                 </Form.Item>
                                 <Form.Item label="日付" required>
-                                    <DatePicker fontsize={"16px"} value={goalDate} onChange={setGoalDate} style={{ width: '100%' }} />
+                                    <DatePicker style={{ fontsize: "16px" }} value={goalDate} onChange={setGoalDate} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item label="開始時間" required>
-                                    <TimePicker fontsize={"16px"} value={goalStartTime} onChange={setGoalStartTime} format="HH:mm" style={{ width: '100%' }} />
+                                    <TimePicker style={{ fontsize: "16px" }} value={goalStartTime} onChange={setGoalStartTime} format="HH:mm" style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item label="終了時間" required>
-                                    <TimePicker fontsize={"16px"} value={goalEndTime} onChange={setGoalEndTime} format="HH:mm" style={{ width: '100%' }} />
+                                    <TimePicker style={{ fontsize: "16px" }} value={goalEndTime} onChange={setGoalEndTime} format="HH:mm" style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Button type="primary" htmlType="submit" block >
                                     送信
@@ -177,16 +177,16 @@ export default function Todo() {
                         <Content>
                             <Form onFinish={handleDoneSubmit} layout="vertical">
                                 <Form.Item label="やったこと" required>
-                                    <Input fontsize={"16px"} value={doneInput} onChange={(e) => setDoneInput(e.target.value)} />
+                                    <Input style={{ fontsize: "16px" }} value={doneInput} onChange={(e) => setDoneInput(e.target.value)} />
                                 </Form.Item>
                                 <Form.Item label="日付" required>
-                                    <DatePicker fontsize={"16px"} value={doneDate} onChange={setDoneDate} style={{ width: '100%' }} />
+                                    <DatePicker style={{ fontsize: "16px" }} value={doneDate} onChange={setDoneDate} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item label="やり始めた時間" required>
-                                    <TimePicker fontsize={"16px"} value={doneStartTime} onChange={setDoneStartTime} format="HH:mm" style={{ width: '100%' }} />
+                                    <TimePicker style={{ fontsize: "16px" }} value={doneStartTime} onChange={setDoneStartTime} format="HH:mm" style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item label="終了時間" required>
-                                    <TimePicker fontsize={"16px"} value={doneEndTime} onChange={setDoneEndTime} format="HH:mm" style={{ width: '100%' }} />
+                                    <TimePicker style={{ fontsize: "16px" }} value={doneEndTime} onChange={setDoneEndTime} format="HH:mm" style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Button type="primary" htmlType="submit" block>
                                     送信
