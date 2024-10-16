@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Input, Form, DatePicker, TimePicker, List, Layout } from 'antd';
+import moment from 'moment';
+const { Header, Content, Footer } = Layout;
 
 export default function Todo() {
     const [goalList, setGoalList] = useState([]);
     const [doneList, setDoneList] = useState([]);
     const [goalInput, setGoalInput] = useState("");
-    const [goalStartTime, setGoalStartTime] = useState("");
-    const [goalEndTime, setGoalEndTime] = useState("");
+    const [goalDate, setGoalDate] = useState(null);
+    const [goalStartTime, setGoalStartTime] = useState(null);
+    const [goalEndTime, setGoalEndTime] = useState(null);
     const [doneInput, setDoneInput] = useState("");
-    const [doneStartTime, setDoneStartTime] = useState("");
-    const [doneEndTime, setDoneEndTime] = useState("");
+    const [doneDate, setDoneDate] = useState(null);
+    const [doneStartTime, setDoneStartTime] = useState(null);
+    const [doneEndTime, setDoneEndTime] = useState(null);
 
     const navigate = useNavigate();
 
-    // ローカルストレージに保存されたデータを読み込み
     useEffect(() => {
         const savedGoals = JSON.parse(localStorage.getItem('goals')) || [];
         const savedDones = JSON.parse(localStorage.getItem('dones')) || [];
@@ -21,146 +25,236 @@ export default function Todo() {
         setDoneList(savedDones);
     }, []);
 
-    // 時間の差を計算
-    const calculateElapsedTime = (startTime, endTime) => {
-        const start = new Date(`1970-01-01T${startTime}:00`);
-        const end = new Date(`1970-01-01T${endTime}:00`);
-        const diff = (end - start) / (1000 * 60);
+    const calculateElapsedTime = (startDate, startTime, endDate, endTime) => {
+        const start = new Date(`${startDate}T${startTime}:00`);
+        let end = new Date(`${endDate}T${endTime}:00`);
 
-        if (diff < 0) {
-            alert("時間設定が間違っているよ！！！");
-            return null;
+        if (end <= start) {
+            end.setDate(end.getDate() + 1);
         }
 
-        const hours = Math.floor(diff / 60);
-        const minutes = diff % 60;
-        return `${hours}時間 ${minutes}分`;
+        // 経過時間の計算
+        const diff = (end - start) / (1000 * 60); // 分単位での差を計算
+        const days = Math.floor(diff / (60 * 24)); // 日数
+        const hours = Math.floor((diff % (60 * 24)) / 60); // 時間
+        const minutes = diff % 60; // 分
+
+        return `${days > 0 ? `${days}日 ` : ''}${hours}時間 ${minutes}分`;
     };
 
-    // やりたいことの送信
-    const handleGoalSubmit = (e) => {
-        e.preventDefault();
-        if (goalInput.trim() && goalStartTime && goalEndTime) {
-            const elapsedTime = calculateElapsedTime(goalStartTime, goalEndTime);
+
+
+    const handleGoalStartTimeChange = (time) => {
+        setGoalStartTime(time);
+        setGoalEndTime(time); // 開始時間が設定されたとき、終了時間も同じに設定
+    };
+
+    const handleDoneStartTimeChange = (time) => {
+        setDoneStartTime(time);
+        setDoneEndTime(time); // やり始めた時間が設定されたとき、終了時間も同じに設定
+    };
+
+    const handleGoalSubmit = () => {
+        if (goalInput.trim() && goalDate && goalStartTime && goalEndTime) {
+            const startDateTime = moment(goalDate).set({
+                hour: goalStartTime.hour(),
+                minute: goalStartTime.minute(),
+            });
+            const endDateTime = moment(goalDate).set({
+                hour: goalEndTime.hour(),
+                minute: goalEndTime.minute(),
+            });
+            const elapsedTime = calculateElapsedTime(startDateTime, endDateTime);
             if (elapsedTime) {
-                const newGoal = { id: Date.now(), text: goalInput, startTime: goalStartTime, endTime: goalEndTime, elapsedTime };
+                const newGoal = {
+                    id: Date.now(),
+                    text: goalInput,
+                    startTime: startDateTime.format("YYYY-MM-DD HH:mm"),
+                    endTime: endDateTime.format("YYYY-MM-DD HH:mm"),
+                    elapsedTime
+                };
                 const updatedGoalList = [...goalList, newGoal];
                 setGoalList(updatedGoalList);
-                localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
+                localStorage.setItem('goals', JSON.stringify(updatedGoalList));
                 setGoalInput("");
-                setGoalStartTime("");
-                setGoalEndTime("");
+                setGoalDate(null);
+                setGoalStartTime(null);
+                setGoalEndTime(null);
             }
         }
     };
 
-    // やったことの送信
-    const handleDoneSubmit = (e) => {
-        e.preventDefault();
-        if (doneInput.trim() && doneStartTime && doneEndTime) {
-            const elapsedTime = calculateElapsedTime(doneStartTime, doneEndTime);
+    const handleDoneSubmit = () => {
+        if (doneInput.trim() && doneDate && doneStartTime && doneEndTime) {
+            const startDateTime = moment(doneDate).set({
+                hour: doneStartTime.hour(),
+                minute: doneStartTime.minute(),
+            });
+            const endDateTime = moment(doneDate).set({
+                hour: doneEndTime.hour(),
+                minute: doneEndTime.minute(),
+            });
+            const elapsedTime = calculateElapsedTime(startDateTime, endDateTime);
             if (elapsedTime) {
-                const newDone = { id: Date.now(), text: doneInput, startTime: doneStartTime, endTime: doneEndTime, elapsedTime };
+                const newDone = {
+                    id: Date.now(),
+                    text: doneInput,
+                    startTime: startDateTime.format("YYYY-MM-DD HH:mm"),
+                    endTime: endDateTime.format("YYYY-MM-DD HH:mm"),
+                    elapsedTime
+                };
                 const updatedDoneList = [...doneList, newDone];
                 setDoneList(updatedDoneList);
-                localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
+                localStorage.setItem('dones', JSON.stringify(updatedDoneList));
                 setDoneInput("");
-                setDoneStartTime("");
-                setDoneEndTime("");
+                setDoneDate(null);
+                setDoneStartTime(null);
+                setDoneEndTime(null);
             }
         }
     };
 
-    // やりたいことの削除
     const handleDeleteGoal = (id) => {
         const updatedGoalList = goalList.filter(goal => goal.id !== id);
         setGoalList(updatedGoalList);
-        localStorage.setItem('goals', JSON.stringify(updatedGoalList)); // ローカルストレージに保存
+        localStorage.setItem('goals', JSON.stringify(updatedGoalList));
     };
 
-    // やったことの削除
     const handleDeleteDone = (id) => {
         const updatedDoneList = doneList.filter(done => done.id !== id);
         setDoneList(updatedDoneList);
-        localStorage.setItem('dones', JSON.stringify(updatedDoneList)); // ローカルストレージに保存
+        localStorage.setItem('dones', JSON.stringify(updatedDoneList));
     };
 
     const handleNavigate = () => {
         navigate("/newpage");
     };
 
-    return (
-        <div>
-            <div className="todo">
-                <h1>やりたいこと・やったこと</h1>
-                <p>ここは「やりたいこと」と「やったこと」の乖離を見るための場所です</p>
-            </div>
-            <div className="summary">
-                <div className="before">
-                    <h2>やりたいこと</h2>
-                    <form onSubmit={handleGoalSubmit}>
-                        <input
-                            type="text"
-                            value={goalInput}
-                            onChange={(e) => setGoalInput(e.target.value)}
-                            placeholder="やりたいことを入力"
-                        />
-                        <input
-                            type="time"
-                            value={goalStartTime}
-                            required
-                            onChange={(e) => setGoalStartTime(e.target.value)}
-                        />
-                        <input
-                            type="time"
-                            value={goalEndTime}
-                            required
-                            onChange={(e) => setGoalEndTime(e.target.value)}
-                        />
-                        <button type="submit">送信</button>
-                    </form>
-                    <ul className="goal">
-                        {goalList.map((goal) => (
-                            <li key={goal.id}>
-                                {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
-                                <button onClick={() => handleDeleteGoal(goal.id)}>削除</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+    const containerStyle = {
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+    };
 
-                <div className="after">
-                    <h2>やったこと</h2>
-                    <form onSubmit={handleDoneSubmit}>
-                        <input
-                            type="text"
-                            value={doneInput}
-                            onChange={(e) => setDoneInput(e.target.value)}
-                            placeholder="やったことを入力"
-                        />
-                        <input
-                            type="time"
-                            value={doneStartTime}
-                            onChange={(e) => setDoneStartTime(e.target.value)}
-                        />
-                        <input
-                            type="time"
-                            value={doneEndTime}
-                            onChange={(e) => setDoneEndTime(e.target.value)}
-                        />
-                        <button type="submit">送信</button>
-                    </form>
-                    <ul className="done">
-                        {doneList.map((done) => (
-                            <li key={done.id}>
-                                {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                                <button onClick={() => handleDeleteDone(done.id)}>削除</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <button onClick={handleNavigate}>まとまったものはこちら</button>
-            </div>
-        </div>
+    const contentStyle = {
+        flex: 1,
+        overflow: 'auto',
+        padding: '20px',
+    };
+
+    const footerstyle = {
+        backgroundColor: "#CBE3C5", textAlign: "center",
+    };
+
+    return (
+        <Layout style={containerStyle}>
+            <Header style={{ backgroundColor: "#97c49c", color: "#22292C", textAlign: "center" }}>
+                <h1>コレヤル</h1>
+            </Header>
+            <Content style={contentStyle}>
+                <Layout style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    <Layout style={{ flex: 1 }}>
+                        <Header style={{ backgroundColor: "#A6B5A5", color: "#fff", textAlign: "center" }}>
+                            <h2>やりたいこと</h2>
+                        </Header>
+                        <Content>
+                            <Form onFinish={handleGoalSubmit} layout="vertical">
+                                <Form.Item label="やる予定のもの" required>
+                                    <Input fontSize={"16px"} value={goalInput} onChange={(e) => setGoalInput(e.target.value)} />
+                                </Form.Item>
+                                <Form.Item label="日付" required>
+                                    <DatePicker fontSize={"16px"} value={goalDate} onChange={setGoalDate} style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Form.Item label="開始時間" required>
+
+                                    <TimePicker
+                                        fontSize={"16px"}
+                                        value={goalStartTime}
+                                        onChange={handleGoalStartTimeChange}
+                                        format="HH:mm"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Form.Item>
+
+
+                                <Form.Item label="終了時間" required>
+                                    <TimePicker
+                                        fontSize={"16px"}
+                                        value={goalEndTime}
+                                        onChange={setGoalEndTime}
+                                        format="HH:mm"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Form.Item>
+                                <Button type="primary" htmlType="submit" block>
+                                    送信
+                                </Button>
+                            </Form>
+                            <List
+                                dataSource={goalList}
+                                renderItem={goal => (
+                                    <List.Item
+                                        actions={[<Button onClick={() => handleDeleteGoal(goal.id)}>削除</Button>]} >
+                                        {goal.text}: {goal.startTime} から {goal.endTime} まで ({goal.elapsedTime})
+                                    </List.Item>
+                                )}
+                            />
+                        </Content>
+                    </Layout>
+                    <Layout style={{ flex: 1 }}>
+                        <Header style={{ backgroundColor: "#A6B5A5", color: "#fff", textAlign: "center" }}>
+                            <h2>やったこと</h2>
+                        </Header>
+                        <Content>
+                            <Form onFinish={handleDoneSubmit} layout="vertical">
+                                <Form.Item label="やったこと" required>
+                                    <Input fontSize={"16px"} value={doneInput} onChange={(e) => setDoneInput(e.target.value)} />
+                                </Form.Item>
+                                <Form.Item label="日付" required>
+                                    <DatePicker fontSize={"16px"} value={doneDate} onChange={setDoneDate} style={{ width: '100%' }} />
+                                </Form.Item>
+                                <Form.Item label="やり始めた時間" required>
+                                    <TimePicker
+                                        fontSize={"16px"}
+                                        value={doneStartTime}
+                                        onChange={handleDoneStartTimeChange} // 修正された部分
+                                        format="HH:mm"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Form.Item>
+                                <Form.Item label="終了時間" required>
+                                    <TimePicker
+                                        fontSize={"16px"}
+                                        value={doneEndTime}
+                                        onChange={setDoneEndTime}
+                                        format="HH:mm"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Form.Item>
+                                <Button type="primary" htmlType="submit" block>
+                                    送信
+                                </Button>
+                            </Form>
+                            <List
+                                dataSource={doneList}
+                                renderItem={done => (
+                                    <List.Item
+                                        actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]} >
+                                        {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
+                                    </List.Item>
+                                )}
+                            />
+                        </Content>
+                    </Layout>
+                </Layout>
+            </Content>
+            <Button style={{ backgroundColor: "#518f54" }} onClick={handleNavigate}>
+                まとまったものはこちら
+            </Button>
+
+            <Footer style={footerstyle}>
+                <a style={{ color: '#383220' }} href='https://github.com/1m4nim'>1m4nim's GitHubはこちら </a>
+            </Footer>
+        </Layout >
     );
 }
