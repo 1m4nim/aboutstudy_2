@@ -25,24 +25,18 @@ export default function Todo() {
         setDoneList(savedDones);
     }, []);
 
-    const calculateElapsedTime = (startDate, startTime, endDate, endTime) => {
-        const start = new Date(`${startDate}T${startTime}:00`);
-        let end = new Date(`${endDate}T${endTime}:00`);
-
-        if (end <= start) {
-            end.setDate(end.getDate() + 1);
+    const calculateElapsedTime = (startDateTime, endDateTime) => {
+        if (endDateTime.isBefore(startDateTime)) {
+            endDateTime.add(1, 'day');
         }
 
-        // 経過時間の計算
-        const diff = (end - start) / (1000 * 60); // 分単位での差を計算
-        const days = Math.floor(diff / (60 * 24)); // 日数
-        const hours = Math.floor((diff % (60 * 24)) / 60); // 時間
-        const minutes = diff % 60; // 分
+        const duration = moment.duration(endDateTime.diff(startDateTime));
+        const days = duration.days();
+        const hours = duration.hours();
+        const minutes = duration.minutes();
 
         return `${days > 0 ? `${days}日 ` : ''}${hours}時間 ${minutes}分`;
     };
-
-
 
     const handleGoalStartTimeChange = (time) => {
         setGoalStartTime(time);
@@ -166,7 +160,6 @@ export default function Todo() {
                                     <DatePicker fontSize={"16px"} value={goalDate} onChange={setGoalDate} style={{ width: '100%' }} />
                                 </Form.Item>
                                 <Form.Item label="開始時間" required>
-
                                     <TimePicker
                                         fontSize={"16px"}
                                         value={goalStartTime}
@@ -175,8 +168,6 @@ export default function Todo() {
                                         style={{ width: '100%' }}
                                     />
                                 </Form.Item>
-
-
                                 <Form.Item label="終了時間" required>
                                     <TimePicker
                                         fontSize={"16px"}
@@ -217,7 +208,7 @@ export default function Todo() {
                                     <TimePicker
                                         fontSize={"16px"}
                                         value={doneStartTime}
-                                        onChange={handleDoneStartTimeChange} // 修正された部分
+                                        onChange={handleDoneStartTimeChange}
                                         format="HH:mm"
                                         style={{ width: '100%' }}
                                     />
@@ -236,25 +227,14 @@ export default function Todo() {
                                 </Button>
                             </Form>
                             <List
-                                dataSource={doneList}
-                                renderItem={done => (
-                                    <List.Item
-                                        actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]} >
-                                        {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime})
-                                    </List.Item>
-                                )}
-                            />
+                                dataSource={doneList} renderItem={done => (<List.Item actions={[<Button onClick={() => handleDeleteDone(done.id)}>削除</Button>]} > {done.text}: {done.startTime} から {done.endTime} まで ({done.elapsedTime}) </List.Item>)} />
                         </Content>
                     </Layout>
                 </Layout>
             </Content>
-            <Button style={{ backgroundColor: "#518f54" }} onClick={handleNavigate}>
-                まとまったものはこちら
-            </Button>
-
+            <Button onClick={handleNavigate}>まとまったものはこちら</Button>
             <Footer style={footerstyle}>
-                <a style={{ color: '#383220' }} href='https://github.com/1m4nim'>1m4nim's GitHubはこちら </a>
+                <a href='https://github.com/1m4nim'>1m4nim's GitHubはこちら</a>
             </Footer>
-        </Layout >
-    );
+        </Layout>);
 }
